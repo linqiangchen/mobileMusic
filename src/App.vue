@@ -40,7 +40,7 @@ export default {
 html,body{
     width: 100%;
     height: 100%;
-    font-size: 10px;
+    font-size: 100px;
 }
 *{
     margin: 0;
@@ -55,12 +55,12 @@ li{
         position: fixed;
         height: 49px;
         width: 100%;
-        font-size:1.6rem;
+        font-size:0.16rem;
         .left{
             display: inline-block;
             position: absolute;
             top: 50%;
-            left: 1rem;
+            left: 0.1rem;
             transform: translateY(-50%);
             height: 16px;
         }
@@ -68,7 +68,7 @@ li{
             
              position: absolute;
             top: 50%;
-            right: 10px;
+            right: 0.1rem;
             transform: translateY(-50%);
              height: 16px;
         }

@@ -85,20 +85,18 @@ export default {
  position: absolute;
  top: 49px;
  z-index: 10;
-  
+  font-size: 0.16rem;
 }
 .my-swipe{
-  height: 120px;
+ 
   
   
 }
   .my-swipe .van-swipe-item {
 
-padding: 10px 10px;
+padding: 0.1rem;
 
   overflow: hidden;
-
-
     img{
      border-radius: 10px;
       width: 100%;
