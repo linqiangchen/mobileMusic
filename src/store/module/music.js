@@ -42,7 +42,7 @@ export default {
                 context.commit('updatePlayUrl', res.data.data[0].url)
             })
             axios.get(context.state.api + '/comment/music?&limit=100&id=' + id).then(res => {
-                // console.log(res.data.hotComments)
+                // 
                const hotComments =  res.data.hotComments.map(item => ({
                    time:item.time,
                    liked:item.likedCount,
@@ -61,11 +61,11 @@ export default {
                     avatar:item.user.avatarUrl,
                 }
             }))
-               console.log(comments)
+               
                 context.commit('updateCommit', {hotComments,comments})
             })
             axios.get(context.state.api + '/lyric?id=' + id).then(res => {
-                console.log(res.data.lrc.lyric)
+                
                 context.commit('updateMusicLyric', res.data.lrc.lyric)
             })
         }
