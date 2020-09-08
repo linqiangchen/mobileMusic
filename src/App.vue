@@ -1,16 +1,6 @@
 <template>
   <div id="app">
     <div id="header">
-<<<<<<< HEAD
-        <div class="left"><van-icon name="wap-nav" /></div>
-        <nav class="nav">
-        <li><router-link to="">我的</router-link></li>
-            <li><router-link to="">发现</router-link></li>
-             <li><router-link to="">云村</router-link></li>
-              <li><router-link to="">视频</router-link></li> 
-        </nav>
-        <div class="right" @click="clickAction"><van-icon name="search" /></div>
-=======
       <div class="left">
         <van-icon name="wap-nav" />
       </div>
@@ -28,10 +18,9 @@
           <router-link to>视频</router-link>
         </li>
       </nav>
-      <div class="right">
-        <van-icon name="search" />
+      <div class="right" >
+        <van-icon name="search" @click="SearchAction"/>
       </div>
->>>>>>> c2135c51ec15d507e767ccefa347f79dea4b9c77
     </div>
     <router-view />
     <div class="music">
@@ -63,18 +52,6 @@ import { Circle } from "vant";
 import { mapState } from "vuex";
 Vue.use(Circle);
 export default {
-<<<<<<< HEAD
-    mounted(){
-        this.$store.dispatch('music/loadMusicUrl',1391509011)
-        // console.log(this.api);
-    },
-    methods:{
-        clickAction(){
-            this.$router.push({name:'Search'})
-        }
-    }
-}
-=======
   computed: {
     ...mapState({
       musicUrl: (state) => state.music.musicUrl,
@@ -101,13 +78,16 @@ export default {
     play() {
       this.$refs.music.play();
     },
+     SearchAction(){
+      this.$router.push('/Search');
+  }
   },
   created() {
     this.$store.dispatch("music/loadMusicUrl", 1351520305);
     console.log(this.api);
   },
+ 
 };
->>>>>>> c2135c51ec15d507e767ccefa347f79dea4b9c77
 </script>
 
 <style lang="scss">

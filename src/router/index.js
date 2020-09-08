@@ -2,10 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Search from '../views/Search.vue'
-<<<<<<< HEAD
-=======
-
->>>>>>> c2135c51ec15d507e767ccefa347f79dea4b9c77
 
 Vue.use(VueRouter)
 
@@ -22,15 +18,13 @@ Vue.use(VueRouter)
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-<<<<<<< HEAD
     path:'/Search',
     name:'Search',
-    component: Search,
-=======
+    component: Search},
+    {
     path: '/mine',
     name: 'mine',
     component: () => import(/* webpackChunkName: "mine" */ '../views/mine.vue')
->>>>>>> c2135c51ec15d507e767ccefa347f79dea4b9c77
   }
 ]
 

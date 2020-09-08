@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import music from './module/music'
 import user from './module/user'
-// import search from './module/search'
+import search from './module/search'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -13,7 +13,7 @@ state:{
   modules: {
     
     music,
-    user
-    // search
+    user,
+    search
   }
 })
