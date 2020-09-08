@@ -8,7 +8,9 @@ export default new Vuex.Store({
 state:{
   api:'http://www.eveal.cn:3003'
 },
+
   modules: {
+    
     music,
     search
   }

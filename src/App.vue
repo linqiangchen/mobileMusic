@@ -8,7 +8,7 @@
              <li><router-link to="">云村</router-link></li>
               <li><router-link to="">视频</router-link></li> 
         </nav>
-        <div class="right"><van-icon name="search" /></div>
+        <div class="right" @click="clickAction"><van-icon name="search" /></div>
     </div>
     <router-view />
 </div>
@@ -24,7 +24,12 @@ import {
 export default {
     mounted(){
         this.$store.dispatch('music/loadMusicUrl',1391509011)
-        console.log(this.api);
+        // console.log(this.api);
+    },
+    methods:{
+        clickAction(){
+            this.$router.push({name:'Search'})
+        }
     }
 }
 </script>

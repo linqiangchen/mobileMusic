@@ -61,11 +61,11 @@ export default {
                     avatar:item.user.avatarUrl,
                 }
             }))
-               console.log(comments)
+            //    console.log(comments)
                 context.commit('updateCommit', {hotComments,comments})
             })
             axios.get(context.state.api + '/lyric?id=' + id).then(res => {
-                console.log(res.data.lrc.lyric)
+                // console.log(res.data.lrc.lyric)
                 context.commit('updateMusicLyric', res.data.lrc.lyric)
             })
         }
