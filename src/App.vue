@@ -23,7 +23,8 @@ import {
 
 export default {
     mounted(){
-        this.$store.dispatch('loadMusicUrl',1391509011)
+        this.$store.dispatch('music/loadMusicUrl',1391509011)
+        console.log(this.api);
     }
 }
 </script>

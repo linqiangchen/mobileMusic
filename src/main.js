@@ -4,7 +4,6 @@ import router from './router'
 import store from './store'
 // import Vue from 'vue';
 import { Icon } from 'vant';
-
 Vue.use(Icon);
 
 Vue.config.productionTip = false
@@ -12,5 +11,6 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
+
   render: h => h(App)
 }).$mount('#app')
