@@ -21,6 +21,8 @@ import Vue from 'vue';
 import { Swipe, SwipeItem } from 'vant';
 import { Tab, Tabs } from 'vant';
 
+
+
 Vue.use(Tab);
 Vue.use(Tabs);
 import axios from 'axios'
