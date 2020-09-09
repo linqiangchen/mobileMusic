@@ -1,5 +1,5 @@
 <template>
-  <div class="mine">
+  <div class="mine" >
     <header class="header">
       <img :src="userAvatr" alt="">
       <div class="user">
@@ -44,11 +44,12 @@
             </li>
         </ul>
     </div>
-    <div class="myLike">
-    <img :src="playlist[0].coverImgUrl" alt="">
+ 
+    <div class="myLike" v-if="playlist">
+    <img :src="like.coverImgUrl" alt="" >
     <div class="info">
         <h3>我喜欢的音乐</h3>
-        <span>{{count}} 首</span>
+        <span>{{like.trackCount}} 首</span>
     </div>
     <p> 
     <i class="iconfont icon-Group"></i><span>心动模式</span>
@@ -61,31 +62,60 @@
 import { mapState } from "vuex";
 export default {
   created() {
-    this.$store.dispatch("user/loadUserInfo", 1351520305);
-    this.$store.dispatch("user/loadPlayList", 1351520305);
+     this.$store.dispatch("user/loadUserInfo");
+    this.$store.dispatch("user/loadPlayList");
+  },
+  beforeCreate(){
+      
+  },
+  data(){
+      return {
+          img:'http://p1.music.126.net/bBQWBSSAqkpGU0sXikON2w==/109951164089165894.jpg',
+          count:0
+      }
+  },
+  mounted(){
+
   },
   computed: {
     ...mapState({
       userName: (state) => state.user.userName,
       userAvatr: (state) => state.user.userAvatr,
       playlist: (state) => state.user.playList,
+      like: (state) => state.user.like,
     }),
-    count(){
-        return this.playlist[0].trackCount
-    },
+    // count(){
+    //     return this.playlist[0].trackCount
+    // },
+    // imgUrl(){
+    //     return this.playlist[0].coverImgUrl
+    // },
+    
   },
+  watch: {
+        'this.playlist':{
+            handler(newVal,oldVal){
+                 console.log(newVal);
+                 if(newVal){
+                     this.img = newVal
+                 }
+            },
+          
+        }
+    },
 };
 </script>
 
 <style scoped lang="scss">
+
 .mine{
     font-size: 0.16rem;
     position: absolute;
-    top: 49px;
+ top: 0;
     padding: 0 0.1rem;
     width: 100%;
-    
-   bottom: 0.44rem;
+    bottom: 0;
+    overflow: auto;
     background-color: #cdc9c8;
 }
 .header{

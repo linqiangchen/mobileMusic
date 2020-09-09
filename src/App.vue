@@ -22,7 +22,10 @@
         <van-icon name="search" @click="SearchAction"/>
       </div>
     </div>
-    <router-view />
+    <div class="content">
+        <router-view />
+    </div>
+
     <div class="music">
       <audio :src="musicUrl"  ref="music"></audio>
       <img :src="musicImg" alt />
@@ -30,7 +33,7 @@
         <h3 class="van-ellipsis">{{musicName}}</h3>
         <p class="van-ellipsis">{{musicSonger}}</p>
       </div>
-      <div class="icon">
+      <div class="icon"  @click="play">
         <van-circle
           v-model="currentRate"
           layer-color="#ebedf0"
@@ -38,7 +41,7 @@
           :speed="100"
           :color="gradientColor"
           size="38px"
-          @click="play"
+         
         />
         <van-icon name="bar-chart-o" />
       </div>
@@ -76,6 +79,7 @@ export default {
 
   methods: {
     play() {
+      console.log(111);
       this.$refs.music.play();
     },
      SearchAction(){
@@ -84,7 +88,8 @@ export default {
   },
   created() {
     this.$store.dispatch("music/loadMusicUrl", 1351520305);
-    console.log(this.api);
+    // this.$store.dispatch("user/loadUserInfo");
+    // this.$store.dispatch("user/loadPlayList");
   },
  
 };
@@ -97,6 +102,13 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+}
+.content{
+  width: 100%;
+  position: absolute;
+  top: 49px;
+  bottom: 44px;
+  overflow: auto  ;
 }
 html,
 body {
@@ -115,12 +127,13 @@ li {
 #app {
     height: 100%;
   #header {
-      background-color: transparent;
-    position: fixed;
+      background-color: #fff;
+    position: absolute;
+    top: 0;
     height: 49px;
     width: 100%;
     font-size: 0.16rem;
-   
+   z-index: 1;
     .left {
       display: inline-block;
       position: absolute;
@@ -156,8 +169,9 @@ li {
     position: fixed;
     bottom: 0;
     display: flex;
+    z-index: 999;
     justify-content: space-between;
-
+background-color: #fff;
     align-items: center;
     font-size: 0.12rem;
     img {

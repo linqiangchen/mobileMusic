@@ -85,7 +85,7 @@ export default {
 .home{
   width: 100%;
  position: absolute;
- top: 49px;
+ top: 0px;
  z-index: 10;
   font-size: 0.16rem;
 }
@@ -96,7 +96,7 @@ export default {
 }
   .my-swipe .van-swipe-item {
 
-padding: 0.1rem;
+padding: 0  0.1rem;
 
   overflow: hidden;
     img{
