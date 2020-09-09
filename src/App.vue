@@ -1,26 +1,20 @@
 <template>
   <div id="app">
     <div id="header">
-      <div class="left van-icon van-icon-wap-nav">
-        
-      </div>
+      
       <nav class="nav">
-        <li>
-          <router-link to="/mine">我的</router-link>
+      <li class="left ">
+         <van-icon name="wap-nav" />
+      </li>
+        <li v-for="item in headerList" :key="item.id" @click="check(item.id)">
+          <router-link :to="item.path" :class="{active:active === item.id}">{{item.title}}</router-link>
         </li>
-        <li>
-          <router-link to="/">发现</router-link>
-        </li>
-        <li>
-          <router-link to>云村</router-link>
-        </li>
-        <li>
-          <router-link to>视频</router-link>
-        </li>
-      </nav>
-      <div class="right">
+        
+        <li class="right">
         <van-icon name="search" @click="SearchAction" />
-      </div>
+      </li>
+      </nav>
+      
     </div>
     <div class="content">
       <router-view />
@@ -69,14 +63,40 @@ export default {
   data() {
     return {
       currentRate: 0,
+      active:1,
       gradientColor: {
         "0%": "#3fecff",
         "100%": "#6149f6",
       },
+      headerList:[
+        {
+          id:0,
+          path:'/mine',
+          title:'我的'
+        },
+        {
+          id:1,
+          path:'/',
+          title:'发现'
+        },
+        {
+          id:2,
+          path:'/',
+          title:'云村'
+        },
+        {
+          id:3,
+          path:'/mine',
+          title:'视频'
+        },
+      ]
     };
   },
 
   methods: {
+    check(id){
+        this.active = id
+    },
     play() {
       console.log(111);
       this.$refs.music.play();
@@ -94,7 +114,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import url("//at.alicdn.com/t/font_2053859_pjvq5dqdpc.css");
+@import url("//at.alicdn.com/t/font_2053859_xkqre4xeo1k.css");
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -119,6 +139,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  letter-spacing: 3px;
 }
 li {
   list-style: none;
@@ -140,14 +161,22 @@ li {
     align-items: center;
    
     .nav {
+      width: 100%;
       height: 100%;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       li {
-        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
         a {
-          color: #333;
+          
+          color: #605e61;
+        }
+        .active{
+         font-weight: bold;
+          color:#242424;
         }
       }
     }
@@ -156,7 +185,7 @@ li {
     width: 100%;
     height: 148px;
     padding:20px  10px;
- 
+//  border-top: 2px #ccc solid;
     position: fixed;
     bottom: 0;
     display: flex;
