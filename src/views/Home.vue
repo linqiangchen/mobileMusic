@@ -4,10 +4,10 @@
   <van-swipe-item v-for =" item in banner" :key="item.id"><img :src="item.imageUrl" alt=""></van-swipe-item>
  
 </van-swipe>
-<van-tabs>
+<van-tabs class="tab">
   <van-tab v-for=" item  in navlist "  :key="item.path" :title="item.title">
 
-    <span>{{item.title }} </span>
+    <span >{{item.title }} </span>
 
   </van-tab>
 </van-tabs>
@@ -89,10 +89,13 @@ export default {
  z-index: 10;
   font-size: 0.16rem;
 }
+.tab, .van-tab{
+  font-size: 36px !important;
+}
 .my-swipe{
- 
-  
-  
+ height: 370px;
+  margin: 30px 0;
+
 }
   .my-swipe .van-swipe-item {
 
@@ -100,8 +103,8 @@ padding: 0  0.1rem;
 
   overflow: hidden;
     img{
-     border-radius: 10px;
-      width: 100%;
+     border-radius: 40px;
+      height: 100%;
     }
   }
 </style>
