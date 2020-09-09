@@ -85,13 +85,12 @@ export default {
 
 #Search{
     width: 100%;
-    height: 100%;
+    top: 0px;
     background: #fff;
-    position: absolute;
+    position: fixed;
     padding: 0 0.2rem;
-    left: 0;
-    top: 0;
     bottom: 0;
+    z-index: 100;
 }
 @keyframes slideIn {
   0% {

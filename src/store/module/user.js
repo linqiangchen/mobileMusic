@@ -7,6 +7,7 @@ export default {
         userName: '',
         userAvatr: '',
         playList: [],
+        like:'',
         api: 'http://www.eveal.cn:3003'
     },
     mutations: {
@@ -14,7 +15,7 @@ export default {
             state.userId = obj
         },
         updateUserInfo(state, obj) {
-            console.log(obj)
+            
             state.userName = obj.userName;
             state.userAvatr = obj.userAvatr
        
@@ -23,7 +24,7 @@ export default {
         },
         updatePlayList(state, obj) {
            state.playList = obj
-       
+            state.like = obj[0]
 
 
         }
@@ -58,7 +59,7 @@ export default {
         },
         loadPlayList(context){
             axios.get(context.state.api + '/user/playlist?uid=' + context.state.userId).then(res => {
-                console.log(res.data.playlist)
+                
               let  playlist = res.data.playlist.map(item => ({
                     id: item.id,
                     name: item.name,
