@@ -70,9 +70,6 @@ export default {
       userAvatr: (state) => state.user.userAvatr,
       playlist: (state) => state.user.playList,
     }),
-    like(){
-        return this.playlist[0].coverImgUrl
-    },
     count(){
         return this.playlist[0].trackCount
     },

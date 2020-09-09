@@ -6,10 +6,10 @@
       </div>
       <nav class="nav">
         <li>
-          <router-link to>我的</router-link>
+          <router-link to="/mine">我的</router-link>
         </li>
         <li>
-          <router-link to>发现</router-link>
+          <router-link to="/">发现</router-link>
         </li>
         <li>
           <router-link to>云村</router-link>
