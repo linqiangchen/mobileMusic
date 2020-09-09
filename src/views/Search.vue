@@ -1,5 +1,5 @@
 <template>
-<transition enter-active-class="slideIn" leave-active-class="slideOut">
+<transition appear enter-active-class="slideIn" leave-active-class="slideOut">
   <div id="Search">
       
      <div class="back">
@@ -89,6 +89,9 @@ export default {
     background: #fff;
     position: absolute;
     padding: 0 0.2rem;
+    left: 0;
+    top: 0;
+    bottom: 0;
 }
 @keyframes slideIn {
   0% {

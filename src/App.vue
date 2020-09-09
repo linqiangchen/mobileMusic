@@ -113,10 +113,13 @@ li {
   list-style: none;
 }
 #app {
+  
     height: 100%;
   #header {
       background-color: transparent;
-    position: fixed;
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 49px;
     width: 100%;
     font-size: 0.16rem;
@@ -153,8 +156,9 @@ li {
     width: 100%;
     height: 0.44rem;
     padding: 0 0.1rem;
-    position: fixed;
+    position: absolute;
     bottom: 0;
+    left: 0;
     display: flex;
     justify-content: space-between;
 
