@@ -6,7 +6,7 @@
         <p>{{userName}}</p>
         <span>LV.8</span>
       </div>
-      <i class="iconfont icon-you"></i>
+      <div class="iconfont icon-you"></div>
     </header>
     <div class="navlist">
         <ul>
@@ -27,7 +27,7 @@
              <p>最近播放</p>
             </li>
             <li>
-             <i class="iconfont icon-yinle1-copy"></i>
+             <i class="iconfont icon-yinyue"></i>
              <p>我的关注</p>
             </li>
             <li>
@@ -112,22 +112,21 @@ export default {
     font-size: 0.16rem;
     position: absolute;
  top: 0;
-    padding: 0 0.1rem;
+    padding: 0 40px;
     width: 100%;
     bottom: 0;
     overflow: auto;
     background-color: #cdc9c8;
 }
 .header{
-    margin-top: 0.1rem;
-    height: 0.6rem;
+    margin-top: 40px;
+    height: 154px;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     img{
-        width: 0.6rem;
-        height: 0.6rem;
+        height: 100%;
         border-radius: 50%;
     }
     .user{
@@ -137,64 +136,69 @@ export default {
         p{
            
             color:#292929;
-            font-size: 0.22rem;
+            font-size: 48px;
         }
         span{
             display: inline-block;
-            border-radius: 10px;
+            border-radius: 23px;
             background-color: #fff;
             color:#444444;
             margin:  2px 0;
-           width: 0.5rem;
-           height: 0.2rem;
+           width: 100px;
+           height:46px;
+           font-size: 26px;
            text-align: center;
-           line-height: 0.2rem;
+           line-height: 46px;
             font-style: italic;
         }
     }
-    i{
+    .iconfont{
         display: block;
-        width: 0.1rem;
+       font-size: 36px;
     }
 }
 .navlist{
     width: 100%;
-    margin-top: 0.2rem;
-    padding:0.1rem;
-    border-radius: 0.1rem;
+    margin-top:40px;
+   
+ height: 470px;
+    border-radius: 40px;
     background-color: #fff;
     ul{
         display: flex;
 
         flex-wrap: wrap;
+        
         li{
-
             width: 25%;
-            height: 0.8rem;
             display: flex;
+            height: 235px;
             flex-direction: column;
             justify-content: center;
             i{
                 color:#fe4a3c;
-                font-size: 0.22rem;
+                font-size: 80px;
             }
             p{
+                font-size: 32px;
                 color:#b1b1b1;
-                margin-top: 0.1rem;
+                margin-top: 24px;
             }
         }
     }
 }
 .myLike{
     display: flex;
-    margin-top: 0.2rem;
+    margin-top: 60px;
     justify-content: space-between;
     align-items: center;
-    padding:  0.1rem;
+    height: 246px;
+  padding: 0 54px;
     background-color: #fff;
-    border-radius: 10px;
+     border-radius: 40px;
     img{
-        width: 0.6rem;
+        width: 150px;
+        border-radius: 20px;
     }
     .info{
         flex: 1;
@@ -204,25 +208,29 @@ export default {
            
             font-weight: normal;
             color:#333;
-            font-size: 0.18rem;
+            font-size:42px;
         }
         span{
             color:#666;
-            font-size: 0.14rem;
+            font-size: 34px;
         }
     }
     p{
-        border: 1px #ccc solid;
-        width: 1rem;
-        height: 0.28rem;
+        border: 1px #666 solid;
+        width: 244px;
+        height: 72px;
          color:#333;
-        border-radius: 0.14rem;
-        line-height: 0.28rem;
+        border-radius: 36px;
+        line-height: 72px;
         display: flex;
+        font-size: 34px;
         justify-content: center;
         align-items: center;
         span{
-            margin:  0 2px;
+            margin:  0 10px;
+        }
+        .iconfont{
+            font-size: 40px;
         }
     }
 }

@@ -4,7 +4,9 @@ export default{
     state:{
         api: 'http://www.eveal.cn:3003',
         defaultKeyWord:'',
-        sugKey:[]  
+        sugKey:[],
+        topListTen:[],  
+        topListRest:[]  
     },
     mutations:{
         defaultKey(state,payload){
@@ -12,6 +14,12 @@ export default{
         },
         sugKey(state,payload){
             state.sugKey=payload
+        },
+        topListTen(state,payload){
+            state.topListTen=payload
+        },
+        topListRest(state,payload){
+            state.topListRest=payload
         }
     },
     actions:{
@@ -41,6 +49,27 @@ export default{
             })
             .catch(error=>{
                 console.log('请求失败了...');
+            })
+        },
+        topListTen(context){
+ 
+            axios.get(
+                context.state.api+`/search/hot/detail`
+            ).then(({data})=>{
+               if(data.code===200){
+                  const ten = data.data.slice(0,10)
+                  console.log(ten);
+                  const rest = data.data.slice(10)
+                //   console.log(rest);
+                context.commit('topListTen',ten);
+               context.commit('topListRest',rest)
+               }
+               
+
+            })
+            .catch(error=>{
+                console.log('请求失败了...');
+                console.log(error);
             })
         }
        

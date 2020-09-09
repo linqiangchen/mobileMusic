@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div id="header">
-      <div class="left">
-        <van-icon name="wap-nav" />
+      <div class="left van-icon van-icon-wap-nav">
+        
       </div>
       <nav class="nav">
         <li>
@@ -18,30 +18,29 @@
           <router-link to>视频</router-link>
         </li>
       </nav>
-      <div class="right" >
-        <van-icon name="search" @click="SearchAction"/>
+      <div class="right">
+        <van-icon name="search" @click="SearchAction" />
       </div>
     </div>
     <div class="content">
-        <router-view />
+      <router-view />
     </div>
 
     <div class="music">
-      <audio :src="musicUrl"  ref="music"></audio>
+      <audio :src="musicUrl" ref="music"></audio>
       <img :src="musicImg" alt />
       <div class="songs">
         <h3 class="van-ellipsis">{{musicName}}</h3>
         <p class="van-ellipsis">{{musicSonger}}</p>
       </div>
-      <div class="icon"  @click="play">
+      <div class="icon" @click="play">
         <van-circle
           v-model="currentRate"
           layer-color="#ebedf0"
           :rate="30"
           :speed="100"
           :color="gradientColor"
-          size="38px"
-         
+          size="60px"
         />
         <van-icon name="bar-chart-o" />
       </div>
@@ -82,33 +81,33 @@ export default {
       console.log(111);
       this.$refs.music.play();
     },
-     SearchAction(){
-      this.$router.push('/Search');
-  }
+    SearchAction() {
+      this.$router.push("/Search");
+    },
   },
   created() {
     this.$store.dispatch("music/loadMusicUrl", 1351520305);
     // this.$store.dispatch("user/loadUserInfo");
     // this.$store.dispatch("user/loadPlayList");
   },
- 
 };
 </script>
 
 <style lang="scss">
-@import url('//at.alicdn.com/t/font_2053859_u7mlazwdrmg.css');
+@import url("//at.alicdn.com/t/font_2053859_pjvq5dqdpc.css");
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 }
-.content{
+.content {
   width: 100%;
   position: absolute;
-  top: 49px;
-  bottom: 44px;
-  overflow: auto  ;
+  top: 120px;
+  bottom: 148px;
+  
+  overflow: auto;
 }
 html,
 body {
@@ -124,32 +123,22 @@ body {
 li {
   list-style: none;
 }
+
 #app {
-  
-    height: 100%;
+  height: 100%;
   #header {
-      background-color: #fff;
+    background-color: #fff;
     position: absolute;
     top: 0;
-    height: 49px;
+    height: 120px;
+    padding: 0 50px;
     width: 100%;
-    font-size: 0.16rem;
-   z-index: 1;
-    .left {
-      display: inline-block;
-      position: absolute;
-      top: 50%;
-      left: 0.1rem;
-      transform: translateY(-50%);
-      height: 16px;
-    }
-    .right {
-      position: absolute;
-      top: 50%;
-      right: 0.1rem;
-      transform: translateY(-50%);
-      height: 16px;
-    }
+    font-size: 50px;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+   
     .nav {
       height: 100%;
       display: flex;
@@ -165,46 +154,53 @@ li {
   }
   .music {
     width: 100%;
-    height: 0.44rem;
-    padding: 0 0.1rem;
-    position: absolute;
+    height: 148px;
+    padding:20px  10px;
+ 
+    position: fixed;
     bottom: 0;
     left: 0;
     display: flex;
     z-index: 999;
     justify-content: space-between;
-background-color: #fff;
+    background-color: #fff;
     align-items: center;
     font-size: 0.12rem;
     img {
-      width: 0.4rem;
-      height: 0.4rem;
+     height: 100%;
     }
     .songs {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-between;
+     
       h3 {
         width: 100%;
         color: #333;
         font-weight: normal;
+        font-size: 40px;
       }
       p {
         width: 100%;
         color: #7d7f7e;
-        font-size: 0.1rem;
+       font-size: 26px;
       }
       flex: 1;
       text-align: left;
-      margin: 0 0.05rem;
+      margin: 0 20px;
     }
     .icon {
       display: flex;
       justify-content: space-between;
- color: #7d7f7e;
+      color: #7d7f7e;
       align-items: center;
-      font-size: 0.3rem;
-      width: 0.8rem;
+      
+      width: 160px;
+       font-size: 60px;
     }
   }
 }

@@ -6,8 +6,9 @@
          <div class="backicon"><i class="iconfont icon-zuo arrow_left"  @click="backAction" /></div>
         <div class="ipt"> 
             <input type="text" :placeholder="defaultKeyWord" @focus='focusAction' v-model="val"  @blur="blurAction" @keyup="keyupAction">
-            <div class="hotKeymenu" v-show="isShow"  @click="selectHotKey">
-                <li v-for="(item,index) in sugKey" :key="index">
+            <div class="hotKeymenu" v-show="isShow">
+                <li>搜索 "{{val}}"</li>
+                <li v-for="(item,index) in sugKey" :key="index" @click="selectHotKey">
                     {{item.keyword}}
                 </li>
                
@@ -15,14 +16,18 @@
            
         </div>
      </div>
-      
+    <HotSearch/>
   </div>
 </transition>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import HotSearch from "./HotSearch";
 export default {
+  components:{
+    HotSearch
+  },
     data(){
         return{
             timer:null,
@@ -33,7 +38,9 @@ export default {
    
      computed: {
     ...mapState({
+      //placeholder的默认值
       defaultKeyWord: (state) => state.search.defaultKeyWord,
+      //输入的建议值
       sugKey: (state) => state.search.sugKey,
     }),
    
@@ -50,6 +57,7 @@ export default {
         },
         focusAction(){
          this.isShow=true;
+         
             
         },
         blurAction(){
@@ -76,6 +84,7 @@ export default {
      
       //初始化关键词
        this.$store.dispatch('search/defaultKey')
+       console.log(this.sugKey);
        
   }
 }
@@ -88,7 +97,7 @@ export default {
     top: 0px;
     background: #fff;
     position: fixed;
-    padding: 0 0.2rem;
+    padding: 0 51px;
     bottom: 0;
     z-index: 100;
 }
@@ -115,17 +124,17 @@ export default {
   animation: slideOut 300ms ease-out;
 }
 .arrow_left{
-    font-size: 0.25rem;
+    font-size: 55px;
 }
 .back{
-    height: 0.6rem;
+    height: 134px;
     display: flex;
     align-items: center;
 }
 .backicon{
-    width: 0.25rem;
-    height: 0.25rem;
-    margin-right: 0.3rem;
+    width: 55px;
+    height: 55px;
+    margin-right: 50px;
 }
 .backicon i{
     display: block;
@@ -134,7 +143,7 @@ export default {
 }
 .ipt{
     width: 100%;
-    height: 0.6rem;
+    height: 134px;
     display: flex;
      position: relative;
    
@@ -143,8 +152,8 @@ export default {
         
        height: 100%;
         border: none;
-       font-size: 0.16rem;
-      height: 0.6rem;
+       font-size:40px;
+      height: 134px;
       
      
     }
@@ -155,7 +164,7 @@ export default {
       height: 1px;
       background-color: transparent;
       border-bottom: 1px solid #333;
-      /* transform: scaleY(0.5); */
+
       position: absolute;
       left: 0;
       bottom: 12px;
@@ -177,20 +186,29 @@ color:#d1d1d1;
 color: #d1d1d1;
 }
 .hotKeymenu{
-    font-size: 12px;
-    width: 100%;
-    /* border: 1px solid lightcoral; */
-    border-radius: 5px;
-    border-top:none;
+    font-size: 30px;
+    width: 953px;
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
     position: absolute;
-    top: 0.45rem;
-    left: 0;
+    top:160px;
+    right: 20px;
     background: #fff;
     z-index: 99;
+    box-shadow: 0 0 0 rgba(0, 0, 0, .8);
+    
+}
+.hotKeymenu li:nth-child(1){
+  color: #55789e;
+  padding-left: 50px;
 }
 .hotKeymenu li{
-    line-height: 0.2rem;
+    line-height: 150px;
+    border-bottom: 1px solid #ccc;
     text-align: left;
-    font-size: 14px;
+    padding-left: 112px;
+    font-size: 40px;
+    color: #888888;
 }
 </style>
