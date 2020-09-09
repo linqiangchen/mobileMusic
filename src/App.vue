@@ -188,6 +188,7 @@ li {
 //  border-top: 2px #ccc solid;
     position: fixed;
     bottom: 0;
+    left: 0;
     display: flex;
     z-index: 999;
     justify-content: space-between;
