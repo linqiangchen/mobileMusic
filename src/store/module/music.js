@@ -86,7 +86,7 @@ export default {
     actions: {
         loadMusicUrl(context, id) {
             axios.get(context.state.api + '/song/detail?ids=' + id).then(res => {
-                console.log( res.data.songs[0])
+                // console.log( res.data.songs[0])
                 context.commit('updateMusicUrl', res.data.songs[0])
             })
             axios.get(context.state.api + '/song/url?id=' + id).then(res => {

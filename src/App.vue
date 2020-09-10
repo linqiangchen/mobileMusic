@@ -14,12 +14,12 @@
         </li>
       </nav>
     </div>
-<keep-alive>
-    <router-view />
-</keep-alive>
+    <keep-alive>
+      <router-view />
+    </keep-alive>
     <div class="music">
-      <audio :src="musicUrl" ref="music"  ></audio>
-      <img :src="musicImg" alt @click="$router.push('/detail')"/>
+      <audio :src="musicUrl" ref="music"></audio>
+      <img :src="musicImg" alt @click="$router.push('/detail')" />
       <div class="songs">
         <h3 class="van-ellipsis">{{musicName}}</h3>
         <p class="van-ellipsis">{{musicSonger}}</p>
@@ -65,16 +65,15 @@ export default {
       return this.currentRate.toFixed(0) + "%";
     },
   },
-  watch:{
-    isplay(newVal){
+  watch: {
+    isplay(newVal) {
+      // console.log(1111);
       this.icon = newVal ? "icon-bofang2" : "icon-bofang1";
-       if (newVal) {
-        this.$refs.music.play();
+      if (newVal) {
       } else {
-        
-        this.$refs.music.pause();
+        // this.$refs.music.pause();
       }
-    }
+    },
   },
   data() {
     return {
@@ -110,22 +109,41 @@ export default {
       ],
     };
   },
-
+  provide() {
+    return {
+      playMusic: this.playmusic,
+      pauseMusic: this.pauseMusic,
+      // 提示：provide 和 inject 绑定并不是可响应的。这是刻意为之的。然而，如果你传入了一个可监听的对象，那么其对象的属性还是可响应的。
+    };
+  },
   methods: {
+    playmusic() {
+      this.$refs.music.play();
+    },
+    pauseMusic() {
+      this.$refs.music.pause();
+    },
     check(id) {
       this.active = id;
     },
     play() {
-      this.$store.commit('music/updatePlay',!this.isplay)  
-      this.$refs.music.ontimeupdate = () => {
-        this.$store.commit('music/updatePt',this.$refs.music.currentTime) 
-      };
+      this.$store.commit("music/updatePlay", !this.isplay);
+      if (this.isplay) {
+        this.playmusic();
+      } else {
+        this.pauseMusic();
+      }
+     
     },
     SearchAction() {
       this.$router.push("/Search");
     },
   },
-  mounted() {},
+  mounted() {
+     this.$refs.music.ontimeupdate = () => {
+        this.$store.commit("music/updatePt", this.$refs.music.currentTime);
+      };
+  },
   created() {
     this.$store.dispatch("music/loadMusicUrl", 32070215);
     this.$store.dispatch("user/loadUserInfo");

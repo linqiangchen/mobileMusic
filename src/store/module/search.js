@@ -5,8 +5,8 @@ export default{
         api: 'http://www.eveal.cn:3003',
         defaultKeyWord:'',
         sugKey:[],
-        topListTen:[],  
-        topListRest:[]  
+        topList:[],  
+        songInfo:[]  
     },
     mutations:{
         defaultKey(state,payload){
@@ -15,11 +15,11 @@ export default{
         sugKey(state,payload){
             state.sugKey=payload
         },
-        topListTen(state,payload){
-            state.topListTen=payload
+        topList(state,payload){
+            state.topList=payload
         },
-        topListRest(state,payload){
-            state.topListRest=payload
+        songInfo(state,payload){
+            state.songInfo=payload
         }
     },
     actions:{
@@ -51,18 +51,18 @@ export default{
                 console.log('请求失败了...');
             })
         },
-        topListTen(context){
+        topList(context){
  
             axios.get(
                 context.state.api+`/search/hot/detail`
             ).then(({data})=>{
                if(data.code===200){
-                  const ten = data.data.slice(0,10)
-                  console.log(ten);
-                  const rest = data.data.slice(10)
-                //   console.log(rest);
-                context.commit('topListTen',ten);
-               context.commit('topListRest',rest)
+                  const List = data.data
+                  
+                 
+                //   console.log(List);
+                context.commit('topList',List);
+               
                }
                
 
@@ -71,7 +71,41 @@ export default{
                 console.log('请求失败了...');
                 console.log(error);
             })
-        }
+        },
+        songInfo(context,payload){
+ 
+            axios.get(
+                context.state.api+`/search?keywords=${payload.val}&limit=${payload.num}`
+            ).then(res=>{
+                //songs数组
+               const info = res.data.result.songs;
+               //歌曲总数
+               const songsCount = res.data.result.songCount
+            //    console.log(songsCount);
+               //过滤数据 每个item都是一个对象，map返回新数组，每个元素也是对象
+               const songInfo= info.map(item=>{
+                var arr= item.artists.map(item=>{
+                    return item.name;
+                })
+                arr=arr.join('/')
+                    return{
+                        id:item.id,
+                        name:item.name,
+                        artists:arr,
+                        alias:item.alias.join(''),
+                        album:item.album.name,
+                        songsCount:songsCount
+                    }
+                })
+                console.log(songInfo);
+                context.commit('songInfo',songInfo);
+
+            })
+            .catch(error=>{
+                console.log('请求失败了...');
+                console.log(error);
+            })
+        },
        
     }
 }
