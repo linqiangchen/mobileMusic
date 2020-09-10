@@ -13,10 +13,10 @@
       <div class="topSear">
           <div class="title">
               <span>热搜榜</span>
-              <span>播放全部</span>
+              <span><i class="iconfont icon-shipin"></i><b>播放全部</b></span>
           </div>
           <ul class="topSearList">
-              <li v-for="(item,index) in topTen" :key="index">
+              <li v-for="(item,index) in topTen" :key="index" @click="autoplay">
                   <span :class="{red:index<=2}">{{index+1}}</span>
                   <span :class="{weight:index<=2}">{{item.searchWord}}</span>
                   <img :src="item.iconUrl" alt="" v-if="item.iconUrl">
@@ -56,6 +56,9 @@ export default {
          this.isShow=false
          this.Index=20
         
+     },
+     autoplay(){
+         console.log(this.$parent);
      }
  },
  mounted(){
@@ -99,7 +102,37 @@ line-height: 90px;
     height: 140px;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ccc;
+    
+}
+.title span:nth-child(1){
+  font-size: 48px;
+  
+}
+.title span:nth-child(2){
+  display: flex;
+  align-items: center;
+  line-height: 54px;
+  font-size: 35px;
+  padding: 15px 20px;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  letter-spacing: 3px;
+}
+b{
+  font-weight: normal;
+}
+.title span:nth-child(2) i{
+  color: #333;
+  font-size: 45px;
+  line-height: 45px;
+  margin-right: 20px;
+  
+}
+.title span:nth-child(2) b{
+  font-size: 40px;
+  line-height: 40px;
+ 
+  
 }
 .topSearList{
     display: flex;

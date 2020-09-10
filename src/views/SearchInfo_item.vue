@@ -20,5 +20,7 @@ export default {
 </script>
 
 <style>
-
+.Searchinfo_item{
+  padding-bottom: 50px;
+}
 </style>

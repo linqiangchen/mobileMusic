@@ -18,7 +18,7 @@
     <router-view />
 
     <div class="music">
-      <audio :src="musicUrl" ref="music"></audio>
+      <audio :src="musicUrl" ref="music" autoplay></audio>
       <img :src="musicImg" alt @click="$router.push('/detail')"/>
       <div class="songs">
         <h3 class="van-ellipsis">{{musicName}}</h3>

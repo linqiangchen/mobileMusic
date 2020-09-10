@@ -59,10 +59,10 @@ export default{
                if(data.code===200){
                   const List = data.data
                   
-                  const rest = data.data.slice(10)
-                //   console.log(rest);
+                 
+                //   console.log(List);
                 context.commit('topList',List);
-               //context.commit('topListRest',rest)
+               
                }
                
 
@@ -75,15 +75,35 @@ export default{
         songInfo(context,payload){
  
             axios.get(
-                context.state.api+`/search/suggest?keywords=${payload}&type=mobile`
+                context.state.api+`/search?keywords=${payload.val}&limit=${payload.num}`
             ).then(res=>{
-               console.log(res);
-                //  const sugKey=res.data.result.allMatch;
-                // context.commit('sugKey',sugKey)
+                //songs数组
+               const info = res.data.result.songs;
+               //歌曲总数
+               const songsCount = res.data.result.songCount
+            //    console.log(songsCount);
+               //过滤数据 每个item都是一个对象，map返回新数组，每个元素也是对象
+               const songInfo= info.map(item=>{
+                var arr= item.artists.map(item=>{
+                    return item.name;
+                })
+                arr=arr.join('/')
+                    return{
+                        id:item.id,
+                        name:item.name,
+                        artists:arr,
+                        alias:item.alias.join(''),
+                        album:item.album.name,
+                        songsCount:songsCount
+                    }
+                })
+                console.log(songInfo);
+                context.commit('songInfo',songInfo);
 
             })
             .catch(error=>{
                 console.log('请求失败了...');
+                console.log(error);
             })
         },
        

@@ -17,21 +17,23 @@
            
         </div>
      </div>
-    <!-- <HotSearch/> -->
-    <SearchInfo v-model="select">
+     <!-- ******热搜榜******* -->
+    <HotSearch v-if="InfoShow"></HotSearch>
+    <!-- *******歌曲详情****** -->
+    <SearchInfo v-model="select" v-else>
         <SearchInfo_item id="total" title="综合">
            <div class="title">
               <span>单曲</span>
               <span><i class="iconfont icon-shipin"></i><b>播放全部</b></span>
           </div>
           <ul class="List">
-            <li>
+            <li v-for="item in songInfo" :key="item.id" @click="palySong(item.id)">
               <div class="List_l">
-                <p>无涯 (Full size)</p>
+                <p>{{item.name}}</p>
                 <p>
-                  <span>醉雪-一人之下第二季OP</span>
+                  <span>{{item.artists}} -  {{item.album}}</span>
                 </p>
-                <p>网剧xxx片尾曲</p>
+                <p v-if="item.alias.length!=0">{{item.alias}}</p>
               </div>
               <div class="List_r">
                 <i class="iconfont icon-shipin"></i>
@@ -39,18 +41,19 @@
               </div>
             </li>
             
-             
+            
           </ul>
+          <!-- 点击后查看全部单曲 -->
+          <p @click="clickAllSongs" v-if="Allsongs">查看全部{{songsCount}}首单曲 <i class="iconfont icon-you"></i></p>
+          <p v-else>已经到底了噢~</p>
         </SearchInfo_item>
-        <SearchInfo_item id="singer" title="歌手">
+        <SearchInfo_item id="danqu" title="单曲">
            歌手的内容
         </SearchInfo_item >
-        <SearchInfo_item id="album" title="专辑">
+        <SearchInfo_item id="singer" title="歌手">
           专辑的内容
         </SearchInfo_item>
-        <SearchInfo_item id="video" title="视频">
-           视频的内容
-        </SearchInfo_item>
+       
     </SearchInfo>
     
  
@@ -71,19 +74,28 @@ export default {
             timer:null,
             isShow:false,
             val:'',
-            select:'total'
+            select:'total',
+            num:5,
+           Allsongs:true,
+           InfoShow:true
+            
         }
     },
    
      computed: {
+       //调用state值
     ...mapState({
       //placeholder的默认值
       defaultKeyWord: (state) => state.search.defaultKeyWord,
       //输入的建议值
       sugKey: (state) => state.search.sugKey,
       songInfo: (state) => state.search.songInfo,
+      
     }),
-   
+   songsCount(){
+     if(this.songInfo.length) return this.songInfo[0].songsCount;
+      
+    }
   },
    methods:{
        load(){
@@ -121,8 +133,24 @@ export default {
              this.$store.dispatch('search/sugKey',this.val)
             }
         },
+        //选择热搜，并发送请求返回歌曲数据
         selectHotKey(e){
             this.val = e.target.innerText;
+           this.$store.dispatch('search/songInfo',{val:this.val,num:this.num})
+           //热搜榜隐藏，歌曲信息显示
+           this.InfoShow = false;
+           //查看全部歌曲显示
+           this.Allsongs=true;
+           //选择框消失
+           this.isShow=false;
+        },
+        //点击后查看全部单曲
+        clickAllSongs(){
+             this.$store.dispatch('search/songInfo',{val:this.val,num:100})
+             this.Allsongs=false;
+        },
+        palySong(id){
+             this.$store.dispatch('music/loadMusicUrl',id)
         }
     
     },
@@ -302,6 +330,7 @@ b{
  
   
 }
+
 .List li,.List_r{
   text-align: left;
   display: flex;
@@ -316,7 +345,15 @@ b{
   margin: 12px 0;
   letter-spacing: 2px;
 }
+.List_l p:nth-child(1){
+  
+ width: 750px;
+}
 .List_l p:nth-child(2){
+  width: 700px;
+  overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
    padding-left: 80px;
   background: url(/assets/SQ.jpg) no-repeat 0 center ;
   font-size: 35px;
