@@ -18,7 +18,7 @@ export default {
         updateMusicUrl(state, obj) {
             state.musicDt = obj.dt
             state.musicId = obj.id
-            state.musicSonger = obj.al.name
+            state.musicSonger = obj.ar.map(item => item.name).join('/')
             state.musicImg = obj.al.picUrl
             state.musicName = obj.name
         },
@@ -36,6 +36,7 @@ export default {
     actions: {
         loadMusicUrl(context, id) {
             axios.get(context.state.api + '/song/detail?ids=' + id).then(res => {
+                console.log( res.data.songs[0])
                 context.commit('updateMusicUrl', res.data.songs[0])
             })
             axios.get(context.state.api + '/song/url?id=' + id).then(res => {

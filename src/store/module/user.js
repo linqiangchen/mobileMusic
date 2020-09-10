@@ -3,10 +3,11 @@ import axios from 'axios'
 export default {
     namespaced: true,
     state: {
-        userId: '282486546',
+        userId: '370540934',//370540934
         userName: '',
         userAvatr: '',
         playList: [],
+        postPlayList:[],
         like:'',
         api: 'http://www.eveal.cn:3003'
     },
@@ -23,8 +24,9 @@ export default {
 
         },
         updatePlayList(state, obj) {
-           state.playList = obj
-            state.like = obj[0]
+           state.playList = obj.userPlaylist
+           state.postPlayList = obj.postPlaylist
+            state.like = obj.userPlaylist[0]
 
 
         }
@@ -58,20 +60,23 @@ export default {
             
         },
         loadPlayList(context){
-            axios.get(context.state.api + '/user/playlist?uid=' + context.state.userId).then(res => {
-                
+            axios.get(context.state.api + '/user/playlist?uid=' + context.state.userId).then(res => { 
               let  playlist = res.data.playlist.map(item => ({
                     id: item.id,
                     name: item.name,
                     coverImgUrl: item.coverImgUrl,
                     trackCount:item.trackCount,
-                    creater: {
+                    creator: {
                         creatorName: item.creator.nickname,
                         signature: item.creator.signature,
-                        avatarUrl: item.creator.avatarUrl
+                        avatarUrl: item.creator.avatarUrl,
+                        userId:item.userId
                     }
                 }))
-                context.commit('updatePlayList',playlist)
+                const userPlaylist = playlist.filter(item => item.creator.userId == context.state.userId)
+                const postPlaylist = playlist.filter(item => item.creator.userId != context.state.userId)
+                console.log('userPlaylist: ', {userPlaylist,postPlaylist});
+                context.commit('updatePlayList',{userPlaylist,postPlaylist})
             })}
     }
 }
