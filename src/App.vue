@@ -14,11 +14,11 @@
         </li>
       </nav>
     </div>
-
+<keep-alive>
     <router-view />
-
+</keep-alive>
     <div class="music">
-      <audio :src="musicUrl" ref="music"></audio>
+      <audio :src="musicUrl" ref="music"  ></audio>
       <img :src="musicImg" alt @click="$router.push('/detail')"/>
       <div class="songs">
         <h3 class="van-ellipsis">{{musicName}}</h3>
@@ -55,6 +55,7 @@ export default {
       musicName: (state) => state.music.musicName,
       musicSonger: (state) => state.music.musicSonger,
       musicDt: (state) => state.music.musicDt,
+      isplay: (state) => state.music.isPlay,
     }),
     speed() {
       return this.musicDt / 100000;
@@ -63,6 +64,17 @@ export default {
     text() {
       return this.currentRate.toFixed(0) + "%";
     },
+  },
+  watch:{
+    isplay(newVal){
+      this.icon = newVal ? "icon-bofang2" : "icon-bofang1";
+       if (newVal) {
+        this.$refs.music.play();
+      } else {
+        
+        this.$refs.music.pause();
+      }
+    }
   },
   data() {
     return {
@@ -73,7 +85,6 @@ export default {
         "0%": "#3fecff",
         "100%": "#6149f6",
       },
-      isplay: false,
       icon: "icon-bofang1",
       headerList: [
         {
@@ -105,20 +116,9 @@ export default {
       this.active = id;
     },
     play() {
-      this.isplay = !this.isplay;
-      this.icon = this.isplay ? "icon-bofang2" : "icon-bofang1";
-      if (this.isplay) {
-        this.$refs.music.play();
-      } else {
-        console.log(2222);
-        this.$refs.music.pause();
-      }
-
+      this.$store.commit('music/updatePlay',!this.isplay)  
       this.$refs.music.ontimeupdate = () => {
-        // this.currentRate = this.$refs.music.currentTime*1000/this.musicDt
-        // console.log('this.musicDt: ', this.musicDt);
-        // console.log('this.$refs.music.currentTime*1000: ', this.$refs.music.currentTime**100/this.musicDt);
-        // console.log(this.$refs.music.currentTime);
+        this.$store.commit('music/updatePt',this.$refs.music.currentTime) 
       };
     },
     SearchAction() {
@@ -127,7 +127,7 @@ export default {
   },
   mounted() {},
   created() {
-    this.$store.dispatch("music/loadMusicUrl", 1352002513);
+    this.$store.dispatch("music/loadMusicUrl", 32070215);
     this.$store.dispatch("user/loadUserInfo");
     this.$store.dispatch("user/loadPlayList");
   },
