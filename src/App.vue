@@ -143,9 +143,15 @@ export default {
      this.$refs.music.ontimeupdate = () => {
         this.$store.commit("music/updatePt", this.$refs.music.currentTime);
       };
+      this.$refs.music.onended = () => {
+        console.log('end');
+        this.$store.commit("music/updatePt", 0);
+        this.$store.commit("music/updatePlay", false);
+      };
+      console.log(this.$refs.music.volume);
   },
   created() {
-    this.$store.dispatch("music/loadMusicUrl", 32070215);
+    this.$store.dispatch("music/loadMusicUrl", 1441758494);
     this.$store.dispatch("user/loadUserInfo");
     this.$store.dispatch("user/loadPlayList");
   },

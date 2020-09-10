@@ -7,7 +7,7 @@
          <div class="backicon"><i class="iconfont icon-zuo arrow_left"  @click="backAction" /></div>
         <div class="ipt"> 
             <input type="text" :placeholder="defaultKeyWord" @input='inputAction' v-model="val"  @blur="blurAction" @keyup="keyupAction">
-            <div class="hotKeymenu" v-show="isShow">
+            <div class="hotKeymenu" v-show="isShow && val">
                 <li>搜索 "{{val}}"</li>
                 <li v-for="(item,index) in sugKey" :key="index" @click="selectHotKey">
                    <i class="iconfont icon-fangdajing"></i><span>{{item.keyword}}</span> 

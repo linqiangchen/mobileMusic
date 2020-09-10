@@ -29,7 +29,7 @@
     <div class="footer">
       <div class="dt">
         <span>{{curTime}}</span>
-        <div class="line" ref="line">
+        <div class="line" ref="line" @click="speed">
           <div class="cover" :style="{width:coverWidth}">
             <div class="bar"></div>
           </div>
@@ -59,7 +59,7 @@ Vue.use(NavBar);
 export default {
   data() {
     return {
-      value: 0.5,
+      value: this.$parent.$refs.music.volume,
       width: "",
       icon: "icon-shipin",
     };
@@ -77,13 +77,13 @@ export default {
       pt: (state) => state.music.pt,
     }),
     curTime() {
-      return this.min(this.pt * 1000);
+      return this.min(this.pt*1000);
     },
     endTime() {
       return this.min(this.musicDt);
     },
     coverWidth() {
-      return (this.pt * 100 * this.width) / this.musicDt + "%";
+      return (this.pt*100000) / this.musicDt + "%";
     },
     musicLrc() {
       return this.musicLyric ? this.musicLyric.ms : [{ c: "暂无歌词" }];
@@ -98,8 +98,23 @@ export default {
       console.log(111);
       this.icon = newVal ? "icon-bofang3" : "icon-shipin";
     },
+    value(newVal){
+        this.$parent.$refs.music.volume = newVal
+    }
   },
+  
   methods: {
+      speed(e){
+          
+          let x = (e.clientX  - this.$refs.line.offsetLeft)/this.width
+          console.log('x : ', x );
+          
+      
+        //   console.log('x*this.musicDt/this.width : ', this.musicDt *(x/this.width));
+         
+          this.$parent.$refs.music.currentTime = x*this.musicDt/1000;
+          this.$store.commit('music/updatePt' ,x*this.musicDt/1000 )
+      },
     load() {},
     log(e) {
       e.refresh();
@@ -153,11 +168,11 @@ export default {
   width: 100%;
   bottom: 0;
   z-index: 1000;
-  background-color: #8ec5fc;
-  background-image: linear-gradient(155deg, #8ec5fc 0%, #e0c3fc 100%);
-  background-image: -webkit-linear-gradient(155deg, #8ec5fc 0%, #e0c3fc 100%);
-  background-image: -moz-linear-gradient(155deg, #8ec5fc 0%, #e0c3fc 100%);
-  background-image: -o-linear-gradient(155deg, #8ec5fc 0%, #e0c3fc 100%);
+background-color: #FFDEE9;
+background-image: linear-gradient(291deg,#FFDEE9 0%,#B5FFFC 100%);
+background-image: -webkit-linear-gradient(291deg,#FFDEE9 0%,#B5FFFC 100%);
+background-image: -moz-linear-gradient(291deg,#FFDEE9 0%,#B5FFFC 100%);
+background-image: -o-linear-gradient(291deg,#FFDEE9 0%,#B5FFFC 100%);
 }
 .header {
   height: 130px;
