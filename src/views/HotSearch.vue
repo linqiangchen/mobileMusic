@@ -21,7 +21,7 @@
                   <span :class="{weight:index===0||index===1||index===2}">{{item.searchWord}}</span>
                   <img :src="item.iconUrl" alt="" v-if="item.iconUrl">
               </li>
-              
+            
           </ul>
           <p @click="moreClickAction" >展开更多热搜 ∨</p>
            <ul class="topSearList" v-if="isShow">

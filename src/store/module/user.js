@@ -3,7 +3,7 @@ import axios from 'axios'
 export default {
     namespaced: true,
     state: {
-        userId: '370540934',
+        userId: '282486546',
         userName: '',
         userAvatr: '',
         playList: [],

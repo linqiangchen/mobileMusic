@@ -5,6 +5,17 @@ import store from './store'
 // import Vue from 'vue';
 import { Icon } from 'vant';
 import 'lib-flexible'
+import IScrollView from 'vue-iscroll-view'
+
+/* Using these kinds of IScroll class for different cases. */
+import IScroll from 'iscroll'
+// import IScroll from 'iscroll/build/iscroll-infinite.js
+// import IScroll from 'iscroll/build/iscroll-probe.js
+// import IScroll from 'iscroll/build/iscroll-view.js
+// import IScroll from 'iscroll/build/iscroll-zoom.js
+// import IScroll from 'iscroll/build/iscroll-lite.js
+
+Vue.use(IScrollView, IScroll)
 Vue.use(Icon);
 
 Vue.config.productionTip = false

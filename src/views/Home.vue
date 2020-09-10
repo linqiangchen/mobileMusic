@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home page">
   <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
   <van-swipe-item v-for =" item in banner" :key="item.id"><img :src="item.imageUrl" alt=""></van-swipe-item>
  
@@ -79,14 +79,10 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   
 
 .home{
-  width: 100%;
- position: absolute;
- top: 0px;
- z-index: 10;
   font-size: 0.16rem;
 }
 .tab, .van-tab{

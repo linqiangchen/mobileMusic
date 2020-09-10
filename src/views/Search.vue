@@ -1,4 +1,5 @@
 <template>
+<iscroll-view class="content" @scrollStart="log" @pullUp="load">
 <transition appear enter-active-class="slideIn" leave-active-class="slideOut">
   <div id="Search">
       
@@ -17,8 +18,10 @@
         </div>
      </div>
     <HotSearch/>
+ 
   </div>
 </transition>
+</iscroll-view>
 </template>
 
 <script>
@@ -46,6 +49,13 @@ export default {
    
   },
    methods:{
+       load(){
+
+    },
+    log(e){
+      e.refresh( )
+    
+    },
         backAction(){
             this.$router.back()
         },
@@ -91,15 +101,18 @@ export default {
 </script>
 
 <style scoped>
-
-#Search{
-    width: 100%;
-    top: 0px;
+.content{
+ width: 100%;
+   position: absolute;
     background: #fff;
-    position: fixed;
+   top: 0px;
+   bottom: 120px;
     padding: 0 51px;
-    bottom: 0;
     z-index: 100;
+}
+#Search{
+   
+   
 }
 @keyframes slideIn {
   0% {

@@ -1,24 +1,24 @@
 <template>
   <div id="app">
     <div id="header">
-      
       <nav class="nav">
-      <li class="left ">
-         <van-icon name="wap-nav" />
-      </li>
+        <li class="left">
+          <van-icon name="wap-nav" />
+        </li>
         <li v-for="item in headerList" :key="item.id" @click="check(item.id)">
           <router-link :to="item.path" :class="{active:active === item.id}">{{item.title}}</router-link>
         </li>
-        
+
         <li class="right">
-        <van-icon name="search" @click="SearchAction" />
-      </li>
+          <van-icon name="search" @click="SearchAction" />
+        </li>
       </nav>
+    </div>
+   
       
-    </div>
-    <div class="content">
-      <router-view />
-    </div>
+        <router-view />
+      
+    
 
     <div class="music">
       <audio :src="musicUrl" ref="music"></audio>
@@ -63,39 +63,39 @@ export default {
   data() {
     return {
       currentRate: 0,
-      active:1,
+      active: 1,
       gradientColor: {
         "0%": "#3fecff",
         "100%": "#6149f6",
       },
-      headerList:[
+      headerList: [
         {
-          id:0,
-          path:'/mine',
-          title:'我的'
+          id: 0,
+          path: "/mine",
+          title: "我的",
         },
         {
-          id:1,
-          path:'/',
-          title:'发现'
+          id: 1,
+          path: "/",
+          title: "发现",
         },
         {
-          id:2,
-          path:'/',
-          title:'云村'
+          id: 2,
+          path: "/",
+          title: "云村",
         },
         {
-          id:3,
-          path:'/mine',
-          title:'视频'
+          id: 3,
+          path: "/mine",
+          title: "视频",
         },
-      ]
+      ],
     };
   },
 
   methods: {
-    check(id){
-        this.active = id
+    check(id) {
+      this.active = id;
     },
     play() {
       console.log(111);
@@ -104,6 +104,20 @@ export default {
     SearchAction() {
       this.$router.push("/Search");
     },
+  },
+  mounted() {
+    // this.$nextTick(() => {
+    //   const scroll = new IScroll(this.$refs.content, {
+    //     click: true,
+    //     tap: true,
+    //     probeType: 3,
+    //   });
+    //   console.log(scroll);
+    //   scroll.refresh()
+    //   console.log(scroll);
+    //   // scroll.refresh()
+    // });
+    
   },
   created() {
     this.$store.dispatch("music/loadMusicUrl", 1351520305);
@@ -126,8 +140,17 @@ export default {
   position: absolute;
   top: 120px;
   bottom: 148px;
-  
-  overflow: auto;
+  overflow: hidden;
+}
+.page{
+   width: 100%;
+  position: absolute;
+  top: 120px;
+  bottom: 148px;
+
+}
+html {
+  touch-action: none;
 }
 html,
 body {
@@ -139,7 +162,6 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  letter-spacing: 3px;
 }
 li {
   list-style: none;
@@ -159,7 +181,7 @@ li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-   
+
     .nav {
       width: 100%;
       height: 100%;
@@ -171,12 +193,11 @@ li {
         align-items: center;
         padding: 0 30px;
         a {
-          
           color: #605e61;
         }
-        .active{
-         font-weight: bold;
-          color:#242424;
+        .active {
+          font-weight: bold;
+          color: #242424;
         }
       }
     }
@@ -184,8 +205,8 @@ li {
   .music {
     width: 100%;
     height: 148px;
-    padding:20px  10px;
-//  border-top: 2px #ccc solid;
+    padding: 20px 10px;
+    //  border-top: 2px #ccc solid;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -196,7 +217,7 @@ li {
     align-items: center;
     font-size: 0.12rem;
     img {
-     height: 100%;
+      height: 100%;
     }
     .songs {
       overflow: hidden;
@@ -206,7 +227,7 @@ li {
       height: 100%;
       flex-direction: column;
       justify-content: space-between;
-     
+
       h3 {
         width: 100%;
         color: #333;
@@ -216,7 +237,7 @@ li {
       p {
         width: 100%;
         color: #7d7f7e;
-       font-size: 26px;
+        font-size: 26px;
       }
       flex: 1;
       text-align: left;
@@ -227,9 +248,9 @@ li {
       justify-content: space-between;
       color: #7d7f7e;
       align-items: center;
-      
+
       width: 160px;
-       font-size: 60px;
+      font-size: 60px;
     }
   }
 }

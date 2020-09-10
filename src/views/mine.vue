@@ -1,4 +1,5 @@
 <template>
+<iscroll-view class="content" @scrollStart="log" @pullUp="load">
   <div class="mine">
     <header class="header">
       <img :src="userAvatr" alt />
@@ -83,6 +84,7 @@
       </ul>
     </div>
   </div>
+</iscroll-view>
 </template>
 
 <script>
@@ -101,6 +103,15 @@ export default {
     };
   },
   mounted() {},
+  methods:{
+    load(){
+
+    },
+    log(e){
+      e.refresh( )
+      
+    }
+  },
   computed: {
     ...mapState({
       userName: (state) => state.user.userName,
@@ -118,7 +129,7 @@ export default {
   watch: {
     "this.playlist": {
       handler(newVal, oldVal) {
-        console.log(newVal);
+        
         if (newVal) {
           this.img = newVal;
         }
@@ -131,14 +142,8 @@ export default {
 <style scoped lang="scss">
 .mine {
   font-size: 0.16rem;
-  position: absolute;
-  top: 0;
-  padding: 0 40px;
-  padding-bottom: 102px;
-  width: 100%;
-  bottom: 0;
-  overflow: auto;
-
+  padding:40px 40px  0;
+  
   background-image: linear-gradient(#cdc9c8, #fff);
 }
 .header {
@@ -322,9 +327,9 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+       overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
         h3 {
           width: 100%;
           font-size: 45px;
