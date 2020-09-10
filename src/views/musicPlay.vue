@@ -34,12 +34,12 @@
             <div class="bar"></div>
           </div>
         </div>
-        <span>02:53</span>
+        <span>{{endTime}}</span>
       </div>
       <div class="musicCor">
         <i class="iconfont icon-xin"></i>
         <i class="iconfont icon-shangyishou"></i>
-        <i class="iconfont  btn"  :class="icon" @click="play"></i>
+        <i class="iconfont btn" :class="icon" @click="play"></i>
         <i class="iconfont icon-xiayishou"></i>
         <i class="iconfont icon-gedan"></i>
       </div>
@@ -60,10 +60,11 @@ export default {
   data() {
     return {
       value: 0.5,
-      width:"",
-      icon:'icon-shipin'
+      width: "",
+      icon: "icon-shipin",
     };
   },
+  inject: ["playMusic", "pauseMusic"],
   computed: {
     ...mapState({
       musicUrl: (state) => state.music.musicUrl,
@@ -76,38 +77,31 @@ export default {
       pt: (state) => state.music.pt,
     }),
     curTime() {
-      
       return this.min(this.pt * 1000);
     },
     endTime() {
-      return this.min(musicDt);
+      return this.min(this.musicDt);
     },
-    coverWidth(){
-           return this.pt*100*this.width/this.musicDt +'%'       
+    coverWidth() {
+      return (this.pt * 100 * this.width) / this.musicDt + "%";
     },
-    musicLrc(){
-        return this.musicLyric?this.musicLyric.ms :[{c:'暂无歌词'}]
+    musicLrc() {
+      return this.musicLyric ? this.musicLyric.ms : [{ c: "暂无歌词" }];
     },
     mounted() {
-        this.width = this.$refs.line.offsetWidth
+      this.width = this.$refs.line.offsetWidth;
     },
   },
 
-  watch:{
-    isplay(newVal){
+  watch: {
+    isplay: function (newVal) {
+      console.log(111);
       this.icon = newVal ? "icon-bofang3" : "icon-shipin";
-      if (newVal) {
-        this.$refs.music.play();
-      } else {
-        
-        this.$refs.music.pause();
-      }
-    }
+    },
   },
   methods: {
     load() {},
     log(e) {
-      
       e.refresh();
     },
     add(str) {
@@ -121,8 +115,13 @@ export default {
       let _s = this.add(parseInt((s % 60000) / 1000));
       return mins + ":" + _s;
     },
-     play() {
-      this.$store.commit('music/updatePlay',!this.isplay)
+    play() {
+      this.$store.commit("music/updatePlay", !this.isplay);
+      if (this.isplay) {
+        this.playMusic();
+      } else {
+        this.pauseMusic();
+      }
     },
   },
 };
@@ -172,16 +171,16 @@ export default {
     flex-direction: column;
     text-align: left;
     flex: 1;
-        overflow: hidden;
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     .songName {
       color: #333;
       font-size: 42px;
-       overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      flex: 1;
     }
     span {
       font-size: 36px;
@@ -220,18 +219,18 @@ export default {
     flex: 1;
 
     .cover {
-    //   width: 20%;
+      //   width: 20%;
       background-color: #8ec5fc;
       height: 8px;
       position: relative;
       .bar {
-          position: absolute;
+        position: absolute;
         width: 24px;
         height: 24px;
         top: 50%;
         right: -12px;
-        transform: translateY(-50% );
-      
+        transform: translateY(-50%);
+
         background-color: #fff;
         border-radius: 50%;
         box-shadow: 0 0.00926rem 0.01852rem rgba(0, 0, 0, 0.5);

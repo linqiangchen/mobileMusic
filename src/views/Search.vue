@@ -69,6 +69,7 @@ export default {
   components:{
     HotSearch,
   },
+  inject:['playMusic','pauseMusic'],
     data(){
         return{
             timer:null,
@@ -151,6 +152,11 @@ export default {
         },
         palySong(id){
              this.$store.dispatch('music/loadMusicUrl',id)
+             this.$store.commit('music/updatePt', 0)
+              this.$store.commit('music/updatePlay',true);
+              setTimeout(()=>{
+           this.playMusic();
+         },1000)
         }
     
     },

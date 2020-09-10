@@ -124,6 +124,7 @@ export default {
                 }
                 context.commit('updateMusicLyric', lr)
             })
+            
         }
     }
 }
