@@ -5,8 +5,8 @@ export default{
         api: 'http://www.eveal.cn:3003',
         defaultKeyWord:'',
         sugKey:[],
-        topListTen:[],  
-        topListRest:[]  
+        topList:[],  
+        songInfo:[]  
     },
     mutations:{
         defaultKey(state,payload){
@@ -15,11 +15,11 @@ export default{
         sugKey(state,payload){
             state.sugKey=payload
         },
-        topListTen(state,payload){
-            state.topListTen=payload
+        topList(state,payload){
+            state.topList=payload
         },
-        topListRest(state,payload){
-            state.topListRest=payload
+        songInfo(state,payload){
+            state.songInfo=payload
         }
     },
     actions:{
@@ -51,18 +51,18 @@ export default{
                 console.log('请求失败了...');
             })
         },
-        topListTen(context){
+        topList(context){
  
             axios.get(
                 context.state.api+`/search/hot/detail`
             ).then(({data})=>{
                if(data.code===200){
-                  const ten = data.data.slice(0,10)
-                  console.log(ten);
+                  const List = data.data
+                  
                   const rest = data.data.slice(10)
                 //   console.log(rest);
-                context.commit('topListTen',ten);
-               context.commit('topListRest',rest)
+                context.commit('topList',List);
+               //context.commit('topListRest',rest)
                }
                
 
@@ -71,7 +71,21 @@ export default{
                 console.log('请求失败了...');
                 console.log(error);
             })
-        }
+        },
+        songInfo(context,payload){
+ 
+            axios.get(
+                context.state.api+`/search/suggest?keywords=${payload}&type=mobile`
+            ).then(res=>{
+               console.log(res);
+                //  const sugKey=res.data.result.allMatch;
+                // context.commit('sugKey',sugKey)
+
+            })
+            .catch(error=>{
+                console.log('请求失败了...');
+            })
+        },
        
     }
 }

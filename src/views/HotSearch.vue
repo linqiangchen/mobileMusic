@@ -16,22 +16,15 @@
               <span>播放全部</span>
           </div>
           <ul class="topSearList">
-              <li v-for="(item,index) in topListTen" :key="index">
-                  <span :class="{red:index===0||index===1||index===2}">{{index+1}}</span>
-                  <span :class="{weight:index===0||index===1||index===2}">{{item.searchWord}}</span>
+              <li v-for="(item,index) in topTen" :key="index">
+                  <span :class="{red:index<=2}">{{index+1}}</span>
+                  <span :class="{weight:index<=2}">{{item.searchWord}}</span>
                   <img :src="item.iconUrl" alt="" v-if="item.iconUrl">
               </li>
             
           </ul>
-          <p @click="moreClickAction" >展开更多热搜 ∨</p>
-           <ul class="topSearList" v-if="isShow">
-              <li v-for="(item,index) in topListRest" :key="index">
-                  <span>{{Index+index+1}}</span>
-                  <span>{{item.searchWord}}</span>
-                  <img :src="item.iconUrl" alt="" v-if="item.iconUrl">
-              </li>
-              
-          </ul>
+          <p @click="moreClickAction" class="resou" v-if="isShow">展开更多热搜<i class="iconfont  icon-v"></i></p>
+          
       </div>
   </div>
 </template>
@@ -42,7 +35,7 @@ import { mapState } from "vuex";
 export default {
     data(){
        return{
-            isShow:false,
+            isShow:true,
              Index:10
        }
     },
@@ -51,18 +44,23 @@ export default {
     ...mapState({
         //取出state中的数据
         //热搜榜前十条数据
-         topListTen:state=>state.search.topListTen,
-         topListRest:state=>state.search.topListRest,
-    })
+         topList:state=>state.search.topList,
+        //  topListRest:state=>state.search.topListRest,
+    }),
+    topTen(){
+        return this.topList.slice(0,this.Index)
+    }
  },
  methods:{
      moreClickAction(){
-         this.isShow=!this.isShow;
+         this.isShow=false
+         this.Index=20
+        
      }
  },
  mounted(){
      //初始化热搜榜
-     this.$store.dispatch('search/topListTen')
+     this.$store.dispatch('search/topList')
  }
  
 }
@@ -141,5 +139,14 @@ color: #999;
 }
 .topSearList li .weight{
     font-weight: 600;
+}
+.resou{
+    color: #ccc;
+    font-size: 40px;
+}
+
+.resou i{
+    margin-left: 20px;
+    font-size: 20px;
 }
 </style>

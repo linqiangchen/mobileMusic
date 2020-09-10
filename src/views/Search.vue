@@ -6,18 +6,53 @@
      <div class="back">
          <div class="backicon"><i class="iconfont icon-zuo arrow_left"  @click="backAction" /></div>
         <div class="ipt"> 
-            <input type="text" :placeholder="defaultKeyWord" @focus='focusAction' v-model="val"  @blur="blurAction" @keyup="keyupAction">
+            <input type="text" :placeholder="defaultKeyWord" @input='inputAction' v-model="val"  @blur="blurAction" @keyup="keyupAction">
             <div class="hotKeymenu" v-show="isShow">
                 <li>搜索 "{{val}}"</li>
                 <li v-for="(item,index) in sugKey" :key="index" @click="selectHotKey">
-                    {{item.keyword}}
+                   <i class="iconfont icon-fangdajing"></i><span>{{item.keyword}}</span> 
                 </li>
                
             </div>
            
         </div>
      </div>
-    <HotSearch/>
+    <!-- <HotSearch/> -->
+    <SearchInfo v-model="select">
+        <SearchInfo_item id="total" title="综合">
+           <div class="title">
+              <span>单曲</span>
+              <span><i class="iconfont icon-shipin"></i><b>播放全部</b></span>
+          </div>
+          <ul class="List">
+            <li>
+              <div class="List_l">
+                <p>无涯 (Full size)</p>
+                <p>
+                  <span>醉雪-一人之下第二季OP</span>
+                </p>
+                <p>网剧xxx片尾曲</p>
+              </div>
+              <div class="List_r">
+                <i class="iconfont icon-shipin"></i>
+                <i class="iconfont icon-sangedian"></i>
+              </div>
+            </li>
+            
+             
+          </ul>
+        </SearchInfo_item>
+        <SearchInfo_item id="singer" title="歌手">
+           歌手的内容
+        </SearchInfo_item >
+        <SearchInfo_item id="album" title="专辑">
+          专辑的内容
+        </SearchInfo_item>
+        <SearchInfo_item id="video" title="视频">
+           视频的内容
+        </SearchInfo_item>
+    </SearchInfo>
+    
  
   </div>
 </transition>
@@ -29,13 +64,14 @@ import { mapState } from "vuex";
 import HotSearch from "./HotSearch";
 export default {
   components:{
-    HotSearch
+    HotSearch,
   },
     data(){
         return{
             timer:null,
             isShow:false,
-            val:''
+            val:'',
+            select:'total'
         }
     },
    
@@ -45,6 +81,7 @@ export default {
       defaultKeyWord: (state) => state.search.defaultKeyWord,
       //输入的建议值
       sugKey: (state) => state.search.sugKey,
+      songInfo: (state) => state.search.songInfo,
     }),
    
   },
@@ -65,7 +102,7 @@ export default {
                  this.$store.dispatch('search/sugKey')
             }, 5000);
         },
-        focusAction(){
+        inputAction(){
          this.isShow=true;
          
             
@@ -94,7 +131,7 @@ export default {
      
       //初始化关键词
        this.$store.dispatch('search/defaultKey')
-       console.log(this.sugKey);
+      //  console.log(this.sugKey);
        
   }
 }
@@ -220,8 +257,81 @@ color: #d1d1d1;
     line-height: 150px;
     border-bottom: 1px solid #ccc;
     text-align: left;
-    padding-left: 112px;
+    padding-left: 50px;
     font-size: 40px;
     color: #888888;
+}
+.hotKeymenu li i{
+  font-size: 40px;
+  margin-right: 50px;
+}
+.title{
+    display: flex;
+    height: 140px;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+.title span:nth-child(1){
+  font-size: 48px;
+  
+}
+.title span:nth-child(2){
+  display: flex;
+  align-items: center;
+  line-height: 54px;
+  font-size: 35px;
+  padding: 15px 20px;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  letter-spacing: 3px;
+}
+b{
+  font-weight: normal;
+}
+.title span:nth-child(2) i{
+  color: #333;
+  font-size: 45px;
+  line-height: 45px;
+  margin-right: 20px;
+  
+}
+.title span:nth-child(2) b{
+  font-size: 40px;
+  line-height: 40px;
+ 
+  
+}
+.List li,.List_r{
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+.List li{
+  margin-bottom: 30px;
+}
+.List_l p{
+  margin: 12px 0;
+  letter-spacing: 2px;
+}
+.List_l p:nth-child(2){
+   padding-left: 80px;
+  background: url(/assets/SQ.jpg) no-repeat 0 center ;
+  font-size: 35px;
+  color: #7f7f7f;
+}
+.List_l p:nth-child(3){
+  
+  font-size: 35px;
+  color: #7f7f7f;
+}
+.List_r{
+  width: 180px;
+}
+.List_r i{
+  font-size: 60px;
+  color: #999;
 }
 </style>
