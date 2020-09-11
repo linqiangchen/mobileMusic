@@ -130,7 +130,7 @@ export default {
                if(!this.val){
                 return;
             }else{
-            //  console.log(this.val);
+            //  
              this.$store.dispatch('search/sugKey',this.val)
             }
         },
@@ -165,8 +165,15 @@ export default {
      
       //初始化关键词
        this.$store.dispatch('search/defaultKey')
-      //  console.log(this.sugKey);
+      //  
        
+  },
+  beforeRouteLeave (to, from, next) {
+    // ...
+    
+    this.InfoShow = true;
+    this.val = ""
+    next();
   }
 }
 </script>
