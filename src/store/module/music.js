@@ -59,40 +59,40 @@ export default {
         isPlay:false
     },
     mutations: {
-        updateMusicUrl(state, obj) {
+        updateMusicUrl(state, obj) {//加载歌曲信息
             state.musicDt = obj.dt
             state.musicId = obj.id
             state.musicSonger = obj.ar.map(item => item.name).join('/')
             state.musicImg = obj.al.picUrl
             state.musicName = obj.name
         },
-        updatePlayUrl(state, url) {
+        updatePlayUrl(state, url) {//加载歌曲播放地址
             state.musicUrl = url
         },
-        updateCommit(state, obj) {
+        updateCommit(state, obj) {//加载歌曲评论
             state.musicHotCommit = obj.hotComments
             state.musicCommit = obj.comments
         },
-        updateMusicLyric(state, obj) {
+        updateMusicLyric(state, obj) {//加载歌曲歌词
             state.musicLyric = obj
         },
-        updatePt(state, pt){
+        updatePt(state, pt){//更新播放时间
             state.pt = pt
         },
-        updatePlay(state, bool){
+        updatePlay(state, bool){//更新播放状态
             state.isPlay = bool
         }
     },
     actions: {
-        loadMusicUrl(context, id) {
-            axios.get(context.state.api + '/song/detail?ids=' + id).then(res => {
+        loadMusicUrl(context, id) {//请求数据
+            axios.get(context.state.api + '/song/detail?ids=' + id).then(res => {//歌曲信息
                 // console.log( res.data.songs[0])
                 context.commit('updateMusicUrl', res.data.songs[0])
             })
-            axios.get(context.state.api + '/song/url?id=' + id).then(res => {
+            axios.get(context.state.api + '/song/url?id=' + id).then(res => {//播放地址
                 context.commit('updatePlayUrl', res.data.data[0].url)
             })
-            axios.get(context.state.api + '/comment/music?&limit=100&id=' + id).then(res => {
+            axios.get(context.state.api + '/comment/music?&limit=100&id=' + id).then(res => {//歌曲评论
                 // 
                const hotComments =  res.data.hotComments.map(item => ({
                    time:item.time,
@@ -115,10 +115,10 @@ export default {
                
                 context.commit('updateCommit', {hotComments,comments})
             })
-            axios.get(context.state.api + '/lyric?id=' + id).then(res => {
+            axios.get(context.state.api + '/lyric?id=' + id).then(res => {//歌曲歌词
                 let lr = ''
                 if(res.data.lrc){
-                    lr = createLrcObj(res.data.lrc.lyric)
+                    lr = createLrcObj(res.data.lrc.lyric)//解析歌词
                 }else{
                     lr = ""
                 }

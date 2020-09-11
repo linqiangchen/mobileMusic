@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 export default {
     namespaced: true,
     state: {
@@ -12,54 +11,28 @@ export default {
         api: 'http://www.eveal.cn:3003'
     },
     mutations: {
-        updateUserId(state, obj) {
+        updateUserId(state, obj) {//切换用户id
             state.userId = obj
         },
-        updateUserInfo(state, obj) {
-            
+        updateUserInfo(state, obj) {//更新用户信息
             state.userName = obj.userName;
             state.userAvatr = obj.userAvatr
-       
-
-
         },
-        updatePlayList(state, obj) {
+        updatePlayList(state, obj) {//更新用户歌单
            state.playList = obj.userPlaylist
            state.postPlayList = obj.postPlaylist
             state.like = obj.userPlaylist[0]
-
-
         }
-        // updateMusicUrl(state, obj) {
-        //     state.musicDt = obj.dt
-        //     state.musicId = obj.id
-        //     state.musicSonger = obj.al.name
-        //     state.musicImg = obj.al.picUrl
-        //     state.musicName = obj.name
-        // },
-        // updatePlayUrl(state, url) {
-        //     state.musicUrl = url
-        // },
-        // updateCommit(state, obj) {
-        //     state.musicHotCommit = obj.hotComments
-        //     state.musicCommit = obj.comments
-        // },
-        // updateMusicLyric(state, obj) {
-        //     state.musicLyric = obj
-        // }
     },
     actions: {
-        loadUserInfo(context) {
-           
+        loadUserInfo(context) { //加载用户信息
             axios.get(context.state.api + '/user/detail?uid=' + context.state.userId).then(res => {
                 let userName= res.data.profile.nickname
                 let userAvatr = res.data.profile.avatarUrl
-                context.commit('updateUserInfo',{userName,userAvatr})
-               
-            })
-            
+                context.commit('updateUserInfo',{userName,userAvatr})        
+            })    
         },
-        loadPlayList(context){
+        loadPlayList(context){//加载用户歌单
             axios.get(context.state.api + '/user/playlist?uid=' + context.state.userId).then(res => { 
               let  playlist = res.data.playlist.map(item => ({
                     id: item.id,
@@ -75,7 +48,6 @@ export default {
                 }))
                 const userPlaylist = playlist.filter(item => item.creator.userId == context.state.userId)
                 const postPlaylist = playlist.filter(item => item.creator.userId != context.state.userId)
-                console.log('userPlaylist: ', {userPlaylist,postPlaylist});
                 context.commit('updatePlayList',{userPlaylist,postPlaylist})
             })}
     }

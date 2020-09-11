@@ -59,8 +59,8 @@
       </div>
       <div class="playlist">
         <ul>
-          <li :class="{active:showlistId }" @click="toggle" >创建歌单</li>
-          <li  :class="{active:!showlistId }" @click="toggle">收藏歌单</li>
+          <li :class="{active:showlistId }" @click="toggle(true)" >创建歌单</li>
+          <li  :class="{active:!showlistId }" @click="toggle(false)">收藏歌单</li>
           <li>歌单助手</li>
         </ul>
       </div>
@@ -73,7 +73,7 @@
           </div>
         </div>
         <ul>
-          <li v-for="item in showList" :key="item.id">
+          <li v-for="item in showList" :key="item.id" @click="loadPlayList(item.id)">
             <img :src="item.coverImgUrl" alt />
             <div>
               <h3>{{item.name}}</h3>
@@ -114,11 +114,13 @@ export default {
   methods: {
     load() {},
     log(e) {
-      // console.log(e);
       e.refresh();
     },
-    toggle(){
-     this.showlistId = !this.showlistId
+    loadPlayList(id){
+      this.$store.dispatch('playList/loadPlayList',id)
+    },
+    toggle(id){
+     this.showlistId = id
       this.showList = this.showlistId ? this.playlist: this.postlist
     }
   },
@@ -130,12 +132,6 @@ export default {
       like: (state) => state.user.like,
       postlist: (state) => state.user.postPlayList,
     }),
-    // count(){
-    //     return this.playlist[0].trackCount
-    // },
-    // imgUrl(){
-    //     return this.playlist[0].coverImgUrl
-    // },
   },
   watch: {
     "this.playlist": {
@@ -355,8 +351,7 @@ export default {
         }
         p {
           font-size: 30px;
-        }
-      
+        } 
       }
       i {
         font-size: 54px;

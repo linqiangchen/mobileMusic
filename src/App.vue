@@ -67,11 +67,9 @@ export default {
   },
   watch: {
     isplay(newVal) {
-      // console.log(1111);
       this.icon = newVal ? "icon-bofang2" : "icon-bofang1";
       if (newVal) {
       } else {
-        // this.$refs.music.pause();
       }
     },
   },
@@ -113,6 +111,8 @@ export default {
     return {
       playMusic: this.playmusic,
       pauseMusic: this.pauseMusic,
+      pt: this.pt,
+      togglePt: this.togglePt,
       // 提示：provide 和 inject 绑定并不是可响应的。这是刻意为之的。然而，如果你传入了一个可监听的对象，那么其对象的属性还是可响应的。
     };
   },
@@ -133,22 +133,25 @@ export default {
       } else {
         this.pauseMusic();
       }
-     
+    },
+    togglePt(pt) {
+      this.pt = pt;
     },
     SearchAction() {
       this.$router.push("/Search");
     },
   },
   mounted() {
-     this.$refs.music.ontimeupdate = () => {
-        this.$store.commit("music/updatePt", this.$refs.music.currentTime);
-      };
-      this.$refs.music.onended = () => {
-        console.log('end');
-        this.$store.commit("music/updatePt", 0);
-        this.$store.commit("music/updatePlay", false);
-      };
-      console.log(this.$refs.music.volume);
+    this.$refs.music.ontimeupdate = () => {
+      this.pt = this.$refs.music.currentTime;
+      this.togglePt(this.$refs.music.currentTime);
+      // this.$store.commit("music/updatePt", this.$refs.music.currentTime);
+    };
+    this.$refs.music.onended = () => {
+      this.togglePt(0);
+      // this.$store.commit("music/updatePt", 0);
+      this.$store.commit("music/updatePlay", false);
+    };
   },
   created() {
     this.$store.dispatch("music/loadMusicUrl", 1441758494);
@@ -165,6 +168,32 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+}
+
+@keyframes music {
+  0% {
+    border: 1px maroon solid;
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    border: 1px maroon solid;
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+@keyframes changeright {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 .content {
   width: 100%;
