@@ -7,7 +7,7 @@
          <div class="backicon"><i class="iconfont icon-zuo arrow_left"  @click="backAction" /></div>
         <div class="ipt"> 
             <input type="text" :placeholder="defaultKeyWord" @input='inputAction' v-model="val"  @blur="blurAction" @keyup="keyupAction" @keydown="keyDonwAction">
-            <div class="hotKeymenu" v-show="isShow">
+            <div class="hotKeymenu" v-show="isShow&& val">
                 <li>搜索 "{{val}}"</li>
                 <li v-for="(item,index) in sugKey" :key="index" @click="selectHotKey">
                    <i class="iconfont icon-fangdajing"></i><span>{{item.keyword}}</span> 
@@ -69,6 +69,7 @@ export default {
   components:{
     HotSearch,
   },
+  inject:['playMusic','pauseMusic'],
     data(){
         return{
             timer:null,
@@ -173,6 +174,11 @@ export default {
         },
         palySong(id){
              this.$store.dispatch('music/loadMusicUrl',id)
+             this.$store.commit('music/updatePt', 0)
+              this.$store.commit('music/updatePlay',true);
+              setTimeout(()=>{
+           this.playMusic();
+         },1000)
         }
     
     },

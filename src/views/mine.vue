@@ -114,7 +114,7 @@ export default {
   methods: {
     load() {},
     log(e) {
-      console.log(e);
+      // console.log(e);
       e.refresh();
     },
     toggle(){

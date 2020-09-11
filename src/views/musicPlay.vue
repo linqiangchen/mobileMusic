@@ -10,19 +10,36 @@
     </div>
     <div class="voices">
       <i class="iconfont icon-yinliang"></i>
-      <van-slider v-model="value" bar-height="4px" active-color="#ee0a24" />
+      <van-slider
+        v-model="value"
+        bar-height="4px"
+        :min="0"
+        :max="1"
+        :step="0.1"
+        active-color="#ee0a24"
+      />
     </div>
-
+    <div class="lrc">
+      <iscroll-view class="content" @scrollStart="log" @pullUp="load">
+        <ul>
+          <li v-for="item in musicLrc" :key="item.id">{{item.c}}</li>
+        </ul>
+      </iscroll-view>
+    </div>
     <div class="footer">
       <div class="dt">
-        <span>00:10</span>
-        <van-slider v-model="value" bar-height="4px" active-color="#ee0a24" />
-        <span>02:53</span>
+        <span>{{curTime}}</span>
+        <div class="line" ref="line" @click="speed">
+          <div class="cover" :style="{width:coverWidth}">
+            <div class="bar"></div>
+          </div>
+        </div>
+        <span>{{endTime}}</span>
       </div>
       <div class="musicCor">
         <i class="iconfont icon-xin"></i>
         <i class="iconfont icon-shangyishou"></i>
-        <i class="iconfont icon-bofang3 btn"></i>
+        <i class="iconfont btn" :class="icon" @click="play"></i>
         <i class="iconfont icon-xiayishou"></i>
         <i class="iconfont icon-gedan"></i>
       </div>
@@ -42,9 +59,12 @@ Vue.use(NavBar);
 export default {
   data() {
     return {
-      value: 10,
+      value: this.$parent.$refs.music.volume,
+      width: "",
+      icon: "icon-shipin",
     };
   },
+  inject: ["playMusic", "pauseMusic"],
   computed: {
     ...mapState({
       musicUrl: (state) => state.music.musicUrl,
@@ -52,12 +72,94 @@ export default {
       musicName: (state) => state.music.musicName,
       musicSonger: (state) => state.music.musicSonger,
       musicDt: (state) => state.music.musicDt,
+      musicLyric: (state) => state.music.musicLyric,
+      isplay: (state) => state.music.isPlay,
+      pt: (state) => state.music.pt,
     }),
+    curTime() {
+      return this.min(this.pt*1000);
+    },
+    endTime() {
+      return this.min(this.musicDt);
+    },
+    coverWidth() {
+      return (this.pt*100000) / this.musicDt + "%";
+    },
+    musicLrc() {
+      return this.musicLyric ? this.musicLyric.ms : [{ c: "暂无歌词" }];
+    },
+    mounted() {
+      this.width = this.$refs.line.offsetWidth;
+    },
+  },
+
+  watch: {
+    isplay: function (newVal) {
+      console.log(111);
+      this.icon = newVal ? "icon-bofang3" : "icon-shipin";
+    },
+    value(newVal){
+        this.$parent.$refs.music.volume = newVal
+    }
+  },
+  
+  methods: {
+      speed(e){
+          
+          let x = (e.clientX  - this.$refs.line.offsetLeft)/this.width
+          console.log('x : ', x );
+          
+      
+        //   console.log('x*this.musicDt/this.width : ', this.musicDt *(x/this.width));
+         
+          this.$parent.$refs.music.currentTime = x*this.musicDt/1000;
+          this.$store.commit('music/updatePt' ,x*this.musicDt/1000 )
+      },
+    load() {},
+    log(e) {
+      e.refresh();
+    },
+    add(str) {
+      //补零
+      return str < 10 ? "0" + str : str;
+    },
+    min(s) {
+      //毫秒转换为分秒
+      s = parseInt(s);
+      let mins = this.add(parseInt(s / 60000));
+      let _s = this.add(parseInt((s % 60000) / 1000));
+      return mins + ":" + _s;
+    },
+    play() {
+      this.$store.commit("music/updatePlay", !this.isplay);
+      if (this.isplay) {
+        this.playMusic();
+      } else {
+        this.pauseMusic();
+      }
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
+.content {
+  width: 100%;
+  height: 1000px;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  li {
+    font-size: 42px;
+    color: #666;
+    line-height: 80px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
 .detail {
   position: fixed;
   padding: 0 54px;
@@ -66,11 +168,11 @@ export default {
   width: 100%;
   bottom: 0;
   z-index: 1000;
-  background-color: #8ec5fc;
-  background-image: linear-gradient(155deg, #8ec5fc 0%, #e0c3fc 100%);
-  background-image: -webkit-linear-gradient(155deg, #8ec5fc 0%, #e0c3fc 100%);
-  background-image: -moz-linear-gradient(155deg, #8ec5fc 0%, #e0c3fc 100%);
-  background-image: -o-linear-gradient(155deg, #8ec5fc 0%, #e0c3fc 100%);
+background-color: #FFDEE9;
+background-image: linear-gradient(291deg,#FFDEE9 0%,#B5FFFC 100%);
+background-image: -webkit-linear-gradient(291deg,#FFDEE9 0%,#B5FFFC 100%);
+background-image: -moz-linear-gradient(291deg,#FFDEE9 0%,#B5FFFC 100%);
+background-image: -o-linear-gradient(291deg,#FFDEE9 0%,#B5FFFC 100%);
 }
 .header {
   height: 130px;
@@ -84,9 +186,16 @@ export default {
     flex-direction: column;
     text-align: left;
     flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     .songName {
       color: #333;
       font-size: 42px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      flex: 1;
     }
     span {
       font-size: 36px;
@@ -118,7 +227,31 @@ export default {
   justify-content: center;
 
   left: 0;
+  .line {
+    background-color: #fff;
+    height: 4px;
+    border-radius: 5px;
+    flex: 1;
 
+    .cover {
+      //   width: 20%;
+      background-color: #8ec5fc;
+      height: 8px;
+      position: relative;
+      .bar {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        top: 50%;
+        right: -12px;
+        transform: translateY(-50%);
+
+        background-color: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0.00926rem 0.01852rem rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
   height: 260px;
   .dt {
     width: 100%;

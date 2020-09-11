@@ -14,12 +14,12 @@
         </li>
       </nav>
     </div>
-
-    <router-view />
-
+    <keep-alive>
+      <router-view />
+    </keep-alive>
     <div class="music">
-      <audio :src="musicUrl" ref="music" autoplay></audio>
-      <img :src="musicImg" alt @click="$router.push('/detail')"/>
+      <audio :src="musicUrl" ref="music"></audio>
+      <img :src="musicImg" alt @click="$router.push('/detail')" />
       <div class="songs">
         <h3 class="van-ellipsis">{{musicName}}</h3>
         <p class="van-ellipsis">{{musicSonger}}</p>
@@ -55,6 +55,7 @@ export default {
       musicName: (state) => state.music.musicName,
       musicSonger: (state) => state.music.musicSonger,
       musicDt: (state) => state.music.musicDt,
+      isplay: (state) => state.music.isPlay,
     }),
     speed() {
       return this.musicDt / 100000;
@@ -62,6 +63,16 @@ export default {
 
     text() {
       return this.currentRate.toFixed(0) + "%";
+    },
+  },
+  watch: {
+    isplay(newVal) {
+      // console.log(1111);
+      this.icon = newVal ? "icon-bofang2" : "icon-bofang1";
+      if (newVal) {
+      } else {
+        // this.$refs.music.pause();
+      }
     },
   },
   data() {
@@ -73,7 +84,6 @@ export default {
         "0%": "#3fecff",
         "100%": "#6149f6",
       },
-      isplay: false,
       icon: "icon-bofang1",
       headerList: [
         {
@@ -99,35 +109,49 @@ export default {
       ],
     };
   },
-
+  provide() {
+    return {
+      playMusic: this.playmusic,
+      pauseMusic: this.pauseMusic,
+      // 提示：provide 和 inject 绑定并不是可响应的。这是刻意为之的。然而，如果你传入了一个可监听的对象，那么其对象的属性还是可响应的。
+    };
+  },
   methods: {
+    playmusic() {
+      this.$refs.music.play();
+    },
+    pauseMusic() {
+      this.$refs.music.pause();
+    },
     check(id) {
       this.active = id;
     },
     play() {
-      this.isplay = !this.isplay;
-      this.icon = this.isplay ? "icon-bofang2" : "icon-bofang1";
+      this.$store.commit("music/updatePlay", !this.isplay);
       if (this.isplay) {
-        this.$refs.music.play();
+        this.playmusic();
       } else {
-        console.log(2222);
-        this.$refs.music.pause();
+        this.pauseMusic();
       }
-
-      this.$refs.music.ontimeupdate = () => {
-        // this.currentRate = this.$refs.music.currentTime*1000/this.musicDt
-        // console.log('this.musicDt: ', this.musicDt);
-        // console.log('this.$refs.music.currentTime*1000: ', this.$refs.music.currentTime**100/this.musicDt);
-        // console.log(this.$refs.music.currentTime);
-      };
+     
     },
     SearchAction() {
       this.$router.push("/Search");
     },
   },
-  mounted() {},
+  mounted() {
+     this.$refs.music.ontimeupdate = () => {
+        this.$store.commit("music/updatePt", this.$refs.music.currentTime);
+      };
+      this.$refs.music.onended = () => {
+        console.log('end');
+        this.$store.commit("music/updatePt", 0);
+        this.$store.commit("music/updatePlay", false);
+      };
+      console.log(this.$refs.music.volume);
+  },
   created() {
-    this.$store.dispatch("music/loadMusicUrl", 1352002513);
+    this.$store.dispatch("music/loadMusicUrl", 1441758494);
     this.$store.dispatch("user/loadUserInfo");
     this.$store.dispatch("user/loadPlayList");
   },
