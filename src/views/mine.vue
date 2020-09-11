@@ -117,7 +117,9 @@ export default {
       e.refresh();
     },
     loadPlayList(id){
+      this.$router.push('/playList')
       this.$store.dispatch('playList/loadPlayList',id)
+      
     },
     toggle(id){
      this.showlistId = id

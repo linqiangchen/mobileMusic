@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div class="detail" @click.self="toggleShow">
     <div>
       <div class="header">
         <i class="iconfont icon-zuo" @click="$router.back()"></i>
@@ -20,13 +20,14 @@
           active-color="#ee0a24"
         />
       </div>
-      <div class="lrc">
+      <div class="lrc" @click.self="toggleShow">
         <iscroll-view
           class="content"
           @scrollStart="start"
           @scrollEnd="end"
           @pullUp="load"
           ref="iscroll"
+          @click.self="toggleShow"
         >
           <ul v-show="!showImg" @click.self="toggleShow">
             <li
@@ -135,7 +136,7 @@ export default {
             c: item.c,
             t: parseFloat(item.t).toFixed(3) * 1000,
           }))
-        : [{ c: "暂无歌词" }];
+        : [{ c: "暂无歌词",t:0 }];
     },
     mounted() {
       this.width = this.$refs.line.offsetWidth;
@@ -227,7 +228,7 @@ export default {
       this.togglePt((x * this.musicDt) / 1000);
     },
     lrcSpeed(t) {
-      if (!this.isplay) {
+      if (!this.isplay || t == 0) {
         return;
       }
       this.togglePt(t / 1000);

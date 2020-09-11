@@ -11,7 +11,8 @@ export default {
         playCount:'',
         api: 'http://www.eveal.cn:3003',
         description:'',
-        songsInfo:[]
+        songsInfo:[],
+        trackCount:''
     },
     mutations: {
         updatePlayList(state, obj) {//更新歌单
@@ -23,6 +24,8 @@ export default {
             state.description = obj.description
             state.trackIds = obj.trackIds
             state.songsInfo = obj.songsInfo
+            state.trackCount = obj.trackCount
+            state.playCount = obj.playCount
         }
     },
     actions: {

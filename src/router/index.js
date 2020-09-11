@@ -13,6 +13,12 @@ Vue.use(VueRouter)
    
   },
   {
+    path: '/playList',
+    name: 'playList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/playList.vue'),
+   
+  },
+  {
     path: '/detail',
     name: 'Home',
     component:() => import(/* webpackChunkName: "about" */ '../views/musicPlay.vue'),
