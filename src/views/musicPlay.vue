@@ -1,71 +1,81 @@
 <template>
   <div class="detail">
-    <div class="header">
-      <i class="iconfont icon-zuo" @click="$router.back()"></i>
-      <p>
-        <span class="songName">{{musicName}}</span>
-        <span>{{musicSonger}}</span>
-      </p>
-      <i class="iconfont icon-SHARE"></i>
-    </div>
-    <div class="voices">
-      <i class="iconfont icon-yinliang"></i>
-      <van-slider
-        v-model="value"
-        bar-height="4px"
-        :min="0"
-        :max="1"
-        :step="0.1"
-        active-color="#ee0a24"
-      />
-    </div>
-    <div class="lrc">
-      <iscroll-view
-        class="content"
-        @scrollStart="start"
-        @scrollEnd="end"
-        @pullUp="load"
-        ref="iscroll"
-      >
-        <ul v-show="!showImg" @click.self="toggleShow">
-          <li
-            v-for="(item ,index) in musicLrc"
-            :key="item.id"
-            :class="{active:lrcIndex === index}"
-            ref="lrc"
-            @click="lrcSpeed(item.t)"
-          >{{item.c}}</li>
-        </ul>
-      </iscroll-view>
-    </div>
-    <div class="musicImg" :class="{ani:isplay}" v-show="showImg" @click="toggleShow">
-      <img
-        :src="musicImg"
-        alt
-        class="songs-img"
-      />
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <div class="footer">
-      <div class="dt">
-        <span>{{curTime}}</span>
-        <div class="line" ref="line" @click="speed">
-          <div class="cover" :style="{width:coverWidth}">
-            <div class="bar"></div>
-          </div>
+    <div>
+      <div class="header">
+        <i class="iconfont icon-zuo" @click="$router.back()"></i>
+        <p>
+          <span class="songName">{{musicName}}</span>
+          <span>{{musicSonger}}</span>
+        </p>
+        <i class="iconfont icon-SHARE" @click="showShare = true"></i>
+      </div>
+      <div class="voices">
+        <i class="iconfont icon-yinliang"></i>
+        <van-slider
+          v-model="value"
+          bar-height="4px"
+          :min="0"
+          :max="1"
+          :step="0.1"
+          active-color="#ee0a24"
+        />
+      </div>
+      <div class="lrc">
+        <iscroll-view
+          class="content"
+          @scrollStart="start"
+          @scrollEnd="end"
+          @pullUp="load"
+          ref="iscroll"
+        >
+          <ul v-show="!showImg" @click.self="toggleShow">
+            <li
+              v-for="(item ,index) in musicLrc"
+              :key="item.id"
+              :class="{active:lrcIndex === index}"
+              ref="lrc"
+              @click="lrcSpeed(item.t)"
+            >{{item.c}}</li>
+          </ul>
+        </iscroll-view>
+      </div>
+      <div class="musicImg" :class="{ani:isplay}" v-show="showImg" @click="toggleShow">
+        <img :src="musicImg" alt class="songs-img" />
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="footer">
+        <div class="musicCor fen">
+          <i class="iconfont icon-xin"></i>
+          <i class="iconfont icon-xiazai1"></i>
+          <i class="iconfont icon-yichang"></i>
+          <i class="iconfont icon-pinglun " @click="$router.push('/detail/comment')"></i>
+          <i class="iconfont icon-gengduo" @click="showShare = true"></i>
         </div>
-        <span>{{endTime}}</span>
-      </div>
-      <div class="musicCor">
-        <i class="iconfont icon-xin"></i>
-        <i class="iconfont icon-shangyishou"></i>
-        <i class="iconfont btn" :class="icon" @click="play"></i>
-        <i class="iconfont icon-xiayishou"></i>
-        <i class="iconfont icon-gedan"></i>
+        <div class="dt">
+          <span>{{curTime}}</span>
+          <div class="line" ref="line" @click="speed">
+            <div class="cover" :style="{width:coverWidth}">
+              <div class="bar"></div>
+            </div>
+          </div>
+          <span>{{endTime}}</span>
+        </div>
+        <div class="musicCor">
+          <i class="iconfont icon-xin"></i>
+          <i class="iconfont icon-shangyishou"></i>
+          <i class="iconfont btn" :class="icon" @click="play"></i>
+          <i class="iconfont icon-xiayishou" ></i>
+          <i class="iconfont icon-gedan"></i>
+        </div>
+        <van-share-sheet v-model="showShare" title="立即分享给好友" :options="options" @select="onSelect" />
       </div>
     </div>
+    <keep-alive>
+       <router-view></router-view>
+    </keep-alive>
+   
   </div>
 </template>
 
@@ -87,7 +97,15 @@ export default {
       lrcScroll: true,
       timer: "",
       iScroll: null,
-      showImg: false  ,
+      showImg: false,
+      showShare: false,
+      options: [
+        { name: "微信", icon: "wechat" },
+        { name: "微博", icon: "weibo" },
+        { name: "复制链接", icon: "link" },
+        { name: "分享海报", icon: "poster" },
+        { name: "二维码", icon: "qrcode" },
+      ],
     };
   },
   inject: ["playMusic", "pauseMusic", "pt", "togglePt"],
@@ -131,8 +149,8 @@ export default {
       },
       immediate: true,
     },
-    musicUrl(){
-      this.$refs.iscroll.scrollTo( 0,0,300);
+    musicUrl() {
+      this.$refs.iscroll.scrollTo(0, 0, 300);
     },
     "$parent.pt": {
       handler: function (newVal) {
@@ -140,12 +158,17 @@ export default {
         //   this.$refs.iscroll.scrollTo(0, 0, 300);
         //   return;
         // }
-        this.lrcIndex = this.musicLrc.findIndex(
-          (item, index, arr) =>
-            item.t <= parseInt(newVal * 1000) &&
-            arr[index + 1].t >= parseInt(newVal * 1000)
-        );
- 
+        this.lrcIndex = this.musicLrc.findIndex((item, index, arr) => {
+          if (index < arr.length - 1) {
+            return (
+              item.t <= parseInt(newVal * 1000) &&
+              arr[index + 1].t >= parseInt(newVal * 1000)
+            );
+          } else {
+            return false;
+          }
+        });
+
         if (this.$refs.iscroll && this.lrcScroll) {
           if (this.lrcIndex > 3) {
             if (
@@ -159,9 +182,16 @@ export default {
               );
               return;
             }
-                   console.log(this.lrcIndex );
-                   console.log('-this.lrcHeight * (this.lrcIndex - 2): ', -this.lrcHeight * (this.lrcIndex - 2));
-            this.$refs.iscroll.scrollTo(0,-this.lrcHeight * (this.lrcIndex - 2),300);
+            console.log(this.lrcIndex);
+            console.log(
+              "-this.lrcHeight * (this.lrcIndex - 2): ",
+              -this.lrcHeight * (this.lrcIndex - 2)
+            );
+            this.$refs.iscroll.scrollTo(
+              0,
+              -this.lrcHeight * (this.lrcIndex - 2),
+              300
+            );
           }
         }
         //
@@ -183,6 +213,10 @@ export default {
     });
   },
   methods: {
+    onSelect(option) {
+      Toast(option.name);
+      this.showShare = false;
+    },
     speed(e) {
       if (!this.isplay) {
         return;
@@ -363,7 +397,7 @@ export default {
   }
 }
 .footer {
-  padding: 0 54px;
+  padding: 10px 54px;
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -372,6 +406,11 @@ export default {
   justify-content: center;
 
   left: 0;
+  .fen {
+    margin-bottom: 20px;
+    font-size: 58px;
+    color: #999;
+  }
   .line {
     background-color: #fff;
     height: 4px;
@@ -419,8 +458,22 @@ export default {
       font-size: 72px;
     }
     .btn {
-      font-size: 142px;
+      font-size: 120px;
     }
   }
+}
+</style>
+<style >
+.van-share-sheet__icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 16px;
+}
+.van-share-sheet__title {
+  margin-top: 8px;
+  color: #323233;
+  font-weight: 400;
+  font-size: 41px;
+  line-height: 50px;
 }
 </style>

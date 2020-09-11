@@ -16,7 +16,11 @@ Vue.use(VueRouter)
     path: '/detail',
     name: 'Home',
     component:() => import(/* webpackChunkName: "about" */ '../views/musicPlay.vue'),
-   
+   children:[{
+    path: 'comment',
+    name: 'comment',
+    component:() => import(/* webpackChunkName: "about" */ '../views/comment.vue'),
+   }]
   },
   {
     path: '/about',

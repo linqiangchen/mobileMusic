@@ -92,3 +92,10 @@ export default {
   }
 }
 </style>
+
+<style >
+    .van-swipe__indicator{
+      width: 16px;
+      height: 16px;
+    }
+</style>

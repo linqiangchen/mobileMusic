@@ -11,6 +11,7 @@ export default {
         playCount:'',
         api: 'http://www.eveal.cn:3003',
         description:'',
+        songsInfo:[]
     },
     mutations: {
         updatePlayList(state, obj) {//更新歌单
@@ -21,6 +22,7 @@ export default {
            state.coverImg = obj.coverImgUrl
             state.description = obj.description
             state.trackIds = obj.trackIds
+            state.songsInfo = obj.songsInfo
         }
     },
     actions: {
@@ -42,7 +44,24 @@ export default {
                         userId:res.data.playlist.userId
                     }
                 }
-                context.commit('updatePlayList',playlist)
-            })}
+                axios.get(context.state.api + '/song/detail?ids=' + playlist.trackIds.slice(0,50).join(',')).then(res => { 
+                    playlist.songsInfo = res.data.songs.map(item => ({
+                        id:item.id,
+                        name:item.name,
+                        artists:item.ar.map(({name} )=> name).join('/'),
+                        alias:item.alia.join(''),
+                        album:item.al.name,
+                        songsCount:50
+                    }))
+               
+                  context.commit('updatePlayList',playlist)
+                  })
+               
+            })
+           
+        
+        }
+            
+           
     }
 }

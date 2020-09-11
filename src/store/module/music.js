@@ -51,9 +51,10 @@ export default {
         musicDt: '',
         musicUrl: '',
         musicName: '',
-        musicHotCommit: '',
-        musicCommit: '',
+        musicHotComment: '',
+        musicComment: '',
         musicLyric: '',
+        total:'',
         api: 'http://www.eveal.cn:3003',
         pt:0,
         isPlay:false
@@ -70,8 +71,9 @@ export default {
             state.musicUrl = url
         },
         updateCommit(state, obj) {//加载歌曲评论
-            state.musicHotCommit = obj.hotComments
-            state.musicCommit = obj.comments
+            state.musicHotComment = obj.hotComments
+            state.musicComment = obj.comments
+            state.total = obj.total
         },
         updateMusicLyric(state, obj) {//加载歌曲歌词
             state.musicLyric = obj
@@ -111,9 +113,10 @@ export default {
                     name:item.user.nickname,
                     avatar:item.user.avatarUrl,
                 }
+                
             }))
-               
-                context.commit('updateCommit', {hotComments,comments})
+            let total  = res.data.total
+                context.commit('updateCommit', {hotComments,comments,total})
             })
             axios.get(context.state.api + '/lyric?id=' + id).then(res => {//歌曲歌词
                 let lr = ''

@@ -9,6 +9,8 @@ import IScrollView from 'vue-iscroll-view'
 import SearchInfo from "./views/SearchInfo";
 import SearchInfo_item from "./views/SearchInfo_item";
 import IScroll from 'iscroll'
+import { ShareSheet } from 'vant';
+Vue.use(ShareSheet);
 Vue.use(IScrollView, IScroll)
 Vue.use(Icon);
 
