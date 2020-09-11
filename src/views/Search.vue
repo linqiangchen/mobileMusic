@@ -6,7 +6,7 @@
      <div class="back">
          <div class="backicon"><i class="iconfont icon-zuo arrow_left"  @click="backAction" /></div>
         <div class="ipt"> 
-            <input type="text" :placeholder="defaultKeyWord" @input='inputAction' v-model="val"  @blur="blurAction" @keyup="keyupAction">
+            <input type="text" :placeholder="defaultKeyWord" @input='inputAction' v-model="val"  @blur="blurAction" @keyup="keyupAction" @keydown="keyDonwAction">
             <div class="hotKeymenu" v-show="isShow">
                 <li>搜索 "{{val}}"</li>
                 <li v-for="(item,index) in sugKey" :key="index" @click="selectHotKey">
@@ -133,6 +133,26 @@ export default {
              this.$store.dispatch('search/sugKey',this.val)
             }
         },
+        keyDonwAction(e){
+          
+           
+              //按下回车键
+              if(e && e.keyCode==13){
+                if(!this.val){
+                   alert('请输入歌名或歌手噢~');
+                    return;
+                }
+                this.$store.dispatch('search/songInfo',{val:this.val,num:this.num})
+                //热搜榜隐藏，歌曲信息显示
+                this.InfoShow = false;
+                //查看全部歌曲显示
+                this.Allsongs=true;
+                //选择框消失
+                this.isShow=false;
+              }
+             
+            
+        },
         //选择热搜，并发送请求返回歌曲数据
         selectHotKey(e){
             this.val = e.target.innerText;
@@ -147,7 +167,9 @@ export default {
         //点击后查看全部单曲
         clickAllSongs(){
              this.$store.dispatch('search/songInfo',{val:this.val,num:100})
-             this.Allsongs=false;
+             setTimeout(() => {
+                this.Allsongs=false;
+             }, 500);
         },
         palySong(id){
              this.$store.dispatch('music/loadMusicUrl',id)
