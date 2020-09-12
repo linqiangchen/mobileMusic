@@ -15,17 +15,47 @@ Vue.use(VueRouter)
   {
     path: '/playList',
     name: 'playList',
-    component: () => import(/* webpackChunkName: "about" */ '../views/playList.vue'),
+    component: () => import(/* webpackChunkName: "playList" */ '../views/playList.vue'),
+   
+  },
+  {
+    path: '/singerMusic',
+    name: 'singerMusic',
+    component: () => import(/* webpackChunkName: "singerMusic" */ '../views/singerMusic.vue'),
+   
+  },
+  {
+    path: '/topList',
+    name: 'topList',
+    component: () => import(/* webpackChunkName: "topList" */ '../views/topList.vue'),
+   
+  },
+  {
+    path: '/singer',
+    name: 'singer',
+    component: () => import(/* webpackChunkName: "singer" */ '../views/singer.vue'),
+   
+  },
+  {
+    path: '/playListPlaza',
+    name: 'playListPlaza',
+    component: () => import(/* webpackChunkName: "playListPlaza" */ '../views/playListPlaza.vue'),
+   
+  },
+  {
+    path: '/playlistTag',
+    name: 'playlistTag',
+    component: () => import(/* webpackChunkName: "playListTag" */ '../views/playlistTag.vue'),
    
   },
   {
     path: '/detail',
     name: 'Home',
-    component:() => import(/* webpackChunkName: "about" */ '../views/musicPlay.vue'),
+    component:() => import(/* webpackChunkName: "musicPlay" */ '../views/musicPlay.vue'),
    children:[{
     path: 'comment',
     name: 'comment',
-    component:() => import(/* webpackChunkName: "about" */ '../views/comment.vue'),
+    component:() => import(/* webpackChunkName: "comment" */ '../views/comment.vue'),
    }]
   },
   {

@@ -57,8 +57,8 @@ export default {
       musicDt: (state) => state.music.musicDt,
       isplay: (state) => state.music.isPlay,
       like: (state) => state.user.like,
-       trackIds: (state) => state.playList.trackIds,
-             list: (state) => state.playMusicList.list,
+      trackIds: (state) => state.playList.trackIds,
+      list: (state) => state.playMusicList.list,
       curIndex: (state) => state.playMusicList.curIndex,
     }),
     speed() {
@@ -76,11 +76,15 @@ export default {
       } else {
       }
     },
-    like(newVal){
+    like(newVal) {
       console.log(newVal);
-         this.$store.dispatch('playList/loadPlayList',this.like.id)
-     this.$store.commit("playMusicList/updateList",{listName:this.like.name,list:this.trackIds,index:0})
-    }
+      this.$store.dispatch("playList/loadPlayList", this.like.id);
+      this.$store.commit("playMusicList/updateList", {
+        listName: this.like.name,
+        list: this.trackIds,
+        index: 0,
+      });
+    },
   },
   data() {
     return {
@@ -100,18 +104,18 @@ export default {
         },
         {
           id: 1,
-          path: "/",
+          path: "/singer",
           title: "发现",
         },
         {
           id: 2,
-          path: "/",
-          title: "云村",
+          path: "/playListPlaza",
+          title: "歌单",
         },
         {
           id: 3,
-          path: "/mine",
-          title: "视频",
+          path: "/topList",
+          title: "排行",
         },
       ],
     };
@@ -151,7 +155,6 @@ export default {
     },
   },
   mounted() {
-    
     this.$refs.music.ontimeupdate = () => {
       this.pt = this.$refs.music.currentTime;
       this.togglePt(this.$refs.music.currentTime);
@@ -159,31 +162,38 @@ export default {
     };
     this.$refs.music.onended = () => {
       this.togglePt(0);
-       if( this.curIndex>=this.list.length-1){
-        return
+      if (this.curIndex >= this.list.length - 1) {
+        return;
       }
-       this.$store.dispatch('music/loadMusicUrl',this.list[this.curIndex+1])
-             this.$store.commit('music/updatePt', 0)
-              this.$store.commit('playMusicList/updateIndex', this.curIndex+1)
-              this.$store.commit('music/updatePlay',true);
-              setTimeout(()=>{
-           this.playmusic();
-         },1000)
+      this.$store.dispatch("music/loadMusicUrl", this.list[this.curIndex + 1]);
+      this.$store.commit("music/updatePt", 0);
+      this.$store.commit("playMusicList/updateIndex", this.curIndex + 1);
+      this.$store.commit("music/updatePlay", true);
+      setTimeout(() => {
+        this.playmusic();
+      }, 1000);
       // this.$store.commit("music/updatePt", 0);
       // this.$store.commit("music/updatePlay", false);
     };
   },
   created() {
+    // if (document.documentElement.clientWidth > 1000) {
+    //   location.href = "http://www.eveal.cn:3000";
+    // }
+    // window.onresize = function () {
+    //   if (document.documentElement.clientWidth > 1000) {
+    //     location.href = "http://www.eveal.cn:3000";
+    //   }
+    // };
     this.$store.dispatch("music/loadMusicUrl", 1441758494);
     this.$store.dispatch("user/loadUserInfo");
     this.$store.dispatch("user/loadPlayList");
-   
   },
 };
 </script>
 
 <style lang="scss">
-@import url("//at.alicdn.com/t/font_2053859_smou30i7gn.css");
+@import url("//at.alicdn.com/t/font_2053859_9nb3c119bdi.css");
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -106,7 +106,7 @@ export default {
   },
   created() {
 
- console.log('this.like.id: ', this.like.id);
+ 
     this.showList = this.playlist
   },
   mounted(){
@@ -142,7 +142,7 @@ export default {
   watch: {
     "this.playlist": {
       handler(newVal, oldVal) {
-       console.log(11111);
+       
       },
     },
   },

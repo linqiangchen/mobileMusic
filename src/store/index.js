@@ -5,6 +5,7 @@ import user from './module/user'
 import search from './module/search'
 import playList from './module/playList'
 import playMusicList from './module/playMusicList'
+import recommend from './module/recommend'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -17,6 +18,7 @@ state:{
     user,
     search,
     playList,
-    playMusicList
+    playMusicList,
+    recommend
   }
 })

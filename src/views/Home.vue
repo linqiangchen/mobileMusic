@@ -1,13 +1,13 @@
 <template>
   <div class="home page">
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for=" item in banner" :key="item.id">
-        <img :src="item.imageUrl" alt />
+      <van-swipe-item v-for="( item ,index) in banner" :key="index">
+        <img :src="item" alt />
       </van-swipe-item>
     </van-swipe>
     <van-tabs class="tab">
       <van-tab v-for=" item  in navlist " :key="item.path" :title="item.title">
-        <span>{{item.title }}</span>
+        <span @click="$router.push('/playListPlaza')">{{item.title }}</span>
       </van-tab>
     </van-tabs>
   </div>
@@ -18,6 +18,7 @@
 import Vue from "vue";
 import { Swipe, SwipeItem } from "vant";
 import { Tab, Tabs } from "vant";
+import { mapState } from "vuex";
 Vue.use(Tab);
 Vue.use(Tabs);
 import axios from "axios";
@@ -28,7 +29,6 @@ export default {
   components: {},
   data() {
     return {
-      banner: [],
       navlist: [
         {
           icon: "111",
@@ -64,10 +64,18 @@ export default {
     };
   },
   created() {
-    axios.get("http://www.eveal.cn:3003/banner").then((res) => {
-      
-      this.banner = res.data.banners;
-    });
+    this.$store.dispatch("recommend/loadBanner");
+    this.$store.dispatch("recommend/loadPlayList");
+  },
+   computed: {
+    ...mapState({
+      banner: (state) => state.recommend.banner,
+      userAvatr: (state) => state.user.userAvatr,
+      playlist: (state) => state.user.playList,
+      like: (state) => state.user.like,
+      postlist: (state) => state.user.postPlayList,
+       trackIds: (state) => state.playList.trackIds,
+    }),
   },
 };
 </script>
@@ -94,8 +102,8 @@ export default {
 </style>
 
 <style >
-    .van-swipe__indicator{
-      width: 16px;
-      height: 16px;
-    }
+.van-swipe__indicator {
+  width: 16px;
+  height: 16px;
+}
 </style>
