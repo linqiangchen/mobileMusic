@@ -65,9 +65,9 @@
         </div>
         <div class="musicCor">
           <i class="iconfont icon-xin"></i>
-          <i class="iconfont icon-shangyishou"></i>
+          <i class="iconfont icon-shangyishou" @click="prev"></i>
           <i class="iconfont btn" :class="icon" @click="play"></i>
-          <i class="iconfont icon-xiayishou" ></i>
+          <i class="iconfont icon-xiayishou" @click="next"></i>
           <i class="iconfont icon-gedan"></i>
         </div>
         <van-share-sheet v-model="showShare" title="立即分享给好友" :options="options" @select="onSelect" />
@@ -119,6 +119,9 @@ export default {
       musicDt: (state) => state.music.musicDt,
       musicLyric: (state) => state.music.musicLyric,
       isplay: (state) => state.music.isPlay,
+      isplay: (state) => state.music.isPlay,
+      list: (state) => state.playMusicList.list,
+      curIndex: (state) => state.playMusicList.curIndex,
       // pt: (state) => state.music.pt,
     }),
     curTime() {
@@ -138,11 +141,11 @@ export default {
           }))
         : [{ c: "暂无歌词",t:0 }];
     },
-    mounted() {
-      this.width = this.$refs.line.offsetWidth;
-    },
   },
-
+beforeRouteLeave (to, from, next) {
+  // ...
+  next()
+},
   watch: {
     isplay: {
       handler: function (newVal) {
@@ -152,6 +155,9 @@ export default {
     },
     musicUrl() {
       this.$refs.iscroll.scrollTo(0, 0, 300);
+    },
+    width() {
+      this.width = this.$refs.line.offsetWidth;
     },
     "$parent.pt": {
       handler: function (newVal) {
@@ -183,11 +189,7 @@ export default {
               );
               return;
             }
-            console.log(this.lrcIndex);
-            console.log(
-              "-this.lrcHeight * (this.lrcIndex - 2): ",
-              -this.lrcHeight * (this.lrcIndex - 2)
-            );
+      
             this.$refs.iscroll.scrollTo(
               0,
               -this.lrcHeight * (this.lrcIndex - 2),
@@ -201,7 +203,7 @@ export default {
       immediate: true,
     },
     // '$parent.pt'(newVal){
-    //   console.log(newVal);
+    //   
     // },
     value(newVal) {
       this.$parent.$refs.music.volume = newVal;
@@ -211,6 +213,10 @@ export default {
     this.lrcHeight = this.$refs.lrc[0].offsetHeight;
     this.$nextTick(() => {
       this.iScroll = this.$refs.iscroll.iscroll;
+    
+        this.width = this.$refs.line.offsetWidth;
+      console.log('this.width: ', this.width);
+      
     });
   },
   methods: {
@@ -218,12 +224,37 @@ export default {
       Toast(option.name);
       this.showShare = false;
     },
+    prev(){
+      if(this.curIndex >0){
+       this.$store.dispatch('music/loadMusicUrl',this.list[this.curIndex-1])
+             this.$store.commit('playMusicList/updateIndex', this.curIndex-1)
+              this.$store.commit('music/updatePlay',true);
+              setTimeout(()=>{
+           this.playMusic();
+         },1000)
+      }
+         
+    },
+    next(){
+       if( this.curIndex>=this.list.length-1){
+        return
+      }
+       this.$store.dispatch('music/loadMusicUrl',this.list[this.curIndex+1])
+             this.$store.commit('music/updatePt', 0)
+              this.$store.commit('playMusicList/updateIndex', this.curIndex+1)
+              this.$store.commit('music/updatePlay',true);
+              setTimeout(()=>{
+           this.playMusic();
+         },1000)
+    },
     speed(e) {
       if (!this.isplay) {
         return;
       }
       let x = (e.clientX - this.$refs.line.offsetLeft) / this.width;
+        console.log('(x * this.musicDt) / 1000: ',  this.width );
       this.$parent.$refs.music.currentTime = (x * this.musicDt) / 1000;
+    
       // this.$store.commit('music/updatePt' ,x*this.musicDt/1000 )
       this.togglePt((x * this.musicDt) / 1000);
     },
@@ -309,9 +340,11 @@ export default {
   li {
     margin: 0 auto;
     font-size: 42px;
-    width: 80%;
+    // width: 80%;
     color: #666;
     // padding: 0 80px;
+    max-width: 80%;
+    width: max-content;
     line-height: 80px;
     height: 80px;
     overflow: hidden;

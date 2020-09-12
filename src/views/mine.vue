@@ -106,9 +106,12 @@ export default {
   },
   created() {
 
+ console.log('this.like.id: ', this.like.id);
     this.showList = this.playlist
   },
   mounted(){
+   
+   
    this.showList = this.playlist
   },
   methods: {
@@ -133,6 +136,7 @@ export default {
       playlist: (state) => state.user.playList,
       like: (state) => state.user.like,
       postlist: (state) => state.user.postPlayList,
+       trackIds: (state) => state.playList.trackIds,
     }),
   },
   watch: {

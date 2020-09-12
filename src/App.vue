@@ -56,6 +56,10 @@ export default {
       musicSonger: (state) => state.music.musicSonger,
       musicDt: (state) => state.music.musicDt,
       isplay: (state) => state.music.isPlay,
+      like: (state) => state.user.like,
+       trackIds: (state) => state.playList.trackIds,
+             list: (state) => state.playMusicList.list,
+      curIndex: (state) => state.playMusicList.curIndex,
     }),
     speed() {
       return this.musicDt / 100000;
@@ -72,6 +76,11 @@ export default {
       } else {
       }
     },
+    like(newVal){
+      console.log(newVal);
+         this.$store.dispatch('playList/loadPlayList',this.like.id)
+     this.$store.commit("playMusicList/updateList",{listName:this.like.name,list:this.trackIds,index:0})
+    }
   },
   data() {
     return {
@@ -142,6 +151,7 @@ export default {
     },
   },
   mounted() {
+    
     this.$refs.music.ontimeupdate = () => {
       this.pt = this.$refs.music.currentTime;
       this.togglePt(this.$refs.music.currentTime);
@@ -149,14 +159,25 @@ export default {
     };
     this.$refs.music.onended = () => {
       this.togglePt(0);
+       if( this.curIndex>=this.list.length-1){
+        return
+      }
+       this.$store.dispatch('music/loadMusicUrl',this.list[this.curIndex+1])
+             this.$store.commit('music/updatePt', 0)
+              this.$store.commit('playMusicList/updateIndex', this.curIndex+1)
+              this.$store.commit('music/updatePlay',true);
+              setTimeout(()=>{
+           this.playmusic();
+         },1000)
       // this.$store.commit("music/updatePt", 0);
-      this.$store.commit("music/updatePlay", false);
+      // this.$store.commit("music/updatePlay", false);
     };
   },
   created() {
     this.$store.dispatch("music/loadMusicUrl", 1441758494);
     this.$store.dispatch("user/loadUserInfo");
     this.$store.dispatch("user/loadPlayList");
+   
   },
 };
 </script>

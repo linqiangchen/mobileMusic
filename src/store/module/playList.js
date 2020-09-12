@@ -39,7 +39,7 @@ export default {
                     playCount:res.data.playlist.playCount,
                     tag:res.data.playlist.tags,
                     description:res.data.playlist.description,
-                    trackIds:res.data.playlist.trackIds.map(item => item.id),
+                    trackIds:res.data.playlist.trackIds.map(item => item.id).slice(0,100),
                     creator: {
                         creatorName: res.data.playlist.creator.nickname,
                         signature: res.data.playlist.creator.signature,
@@ -47,7 +47,7 @@ export default {
                         userId:res.data.playlist.userId
                     }
                 }
-                axios.get(context.state.api + '/song/detail?ids=' + playlist.trackIds.slice(0,50).join(',')).then(res => { 
+                axios.get(context.state.api + '/song/detail?ids=' + playlist.trackIds.slice(0,100).join(',')).then(res => { 
                     playlist.songsInfo = res.data.songs.map(item => ({
                         id:item.id,
                         name:item.name,

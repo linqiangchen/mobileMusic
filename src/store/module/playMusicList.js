@@ -10,7 +10,10 @@ export default {
         updateList(state, obj) {
            state.listName = obj.listName
            state.list = obj.list
-            state.curIndex = obj.curIndex
+            state.curIndex = obj.index
+        },
+        updateIndex(state,obj){
+            state.curIndex = obj
         }
     },
 }

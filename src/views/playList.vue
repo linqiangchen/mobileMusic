@@ -42,6 +42,9 @@
         </li>
       </ul>
     </div>
+    <div class="animate__animated animate__zoomOutDown ani" :style="style" v-if="isAni">
+      <i class="iconfont icon-yinyue"></i>
+    </div>
     <div class="tit">
       <div class="left">
         <i class="iconfont icon-shipin"></i>
@@ -58,8 +61,12 @@
     <iscroll-view class="pl-content" @scrollStart="log">
       <div>
         <ul>
-          <li v-for="(item , index) in songsInfo" :key="item.id" @click="playMyMusic(item.id)">
-            <p class="_w">{{index}}</p>
+          <li
+            v-for="(item , index) in songsInfo"
+            :key="item.id"
+            @click="playMyMusic(item.id,index,$event)"
+          >
+            <p class="_w">{{index+1}}</p>
             <div>
               <p class="name">{{item.name}}</p>
               <p class="user">{{item.artists}} - {{item.album}}</p>
@@ -88,6 +95,11 @@ export default {
     return {
       banner: [],
       active: true,
+      isAni: false,
+      style: {
+        top: 0,
+        left: 0,
+      },
     };
   },
   computed: {
@@ -101,13 +113,14 @@ export default {
       songsInfo: (state) => state.playList.songsInfo,
       trackCount: (state) => state.playList.trackCount,
       playCount: (state) => state.playList.playCount,
+      trackIds: (state) => state.playList.trackIds,
     }),
     showComList() {
       return this.active ? this.musicHotComment : this.musicComment;
     },
   },
   created() {
-    this.$store.dispatch("playList/loadPlayList", 2913393435);
+
   },
   methods: {
     toggleDate(time) {
@@ -118,10 +131,23 @@ export default {
       let day = this.add(date.getDate());
       return year + "年" + mouth + "月" + day + "日";
     },
-    playMyMusic(id) {
+    playMyMusic(id, index, e) {
+      this.isAni = true;
+      this.style = {
+        top: e.clientY - 40 + "px",
+        left: e.clientX - 40 + "px",
+      };
+      setTimeout(() => {
+        this.isAni = false;
+      }, 1000);
       this.$store.dispatch("music/loadMusicUrl", id);
-    //   this.$store.commit("music/updatePt", 0);
+      //   this.$store.commit("music/updatePt", 0);
       this.$store.commit("music/updatePlay", true);
+      this.$store.commit("playMusicList/updateList", {
+        listName: this.name,
+        list: this.trackIds,
+        index,
+      });
       setTimeout(() => {
         this.playMusic();
       }, 1000);
@@ -226,6 +252,18 @@ export default {
     }
   }
 }
+.ani {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0;
+  z-index: 1000;
+
+  i {
+    font-size: 80px;
+    color: maroon;
+  }
+}
 .pl-content {
   width: 100%;
   position: absolute;
@@ -236,6 +274,7 @@ export default {
   overflow: hidden;
   ul {
     padding-top: 100px;
+    padding-bottom: 150px;
     li {
       display: flex;
       padding: 0 30px;
