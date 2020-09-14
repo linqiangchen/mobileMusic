@@ -39,7 +39,7 @@
 
         <ul class="list">
           <li class="" v-for="item in nextPlaylist" :key="item.id" @click="loadPlayList(item.id)">
-            <img :src="item.coverImgUrl" alt />
+            <img v-lazy="item.coverImgUrl" alt />
             <p>{{item.name}}</p>
             <div class="coun">
               <i class="iconfont icon-bofang1"></i>
@@ -59,6 +59,7 @@ import Vue from "vue";
 import { Swipe, SwipeItem } from "vant";
 import { Tab, Tabs } from "vant";
 import { mapState } from "vuex";
+
 Vue.use(Tab);
 Vue.use(Tabs);
 import axios from "axios";
@@ -123,7 +124,7 @@ export default {
        
           }
         this.swiper.slideTo(1)
-        console.log("this.swiper: ", this.swiper);
+        
       });
     },
   },

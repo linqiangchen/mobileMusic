@@ -10,10 +10,17 @@ import SearchInfo from "./views/SearchInfo";
 import SearchInfo_item from "./views/SearchInfo_item";
 import IScroll from 'iscroll'
 import { ShareSheet } from 'vant';
+import VueLazyload from 'vue-lazyload'
+
 Vue.use(ShareSheet);
 Vue.use(IScrollView, IScroll)
 Vue.use(Icon);
-
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  // error: 'dist/error.png',
+  loading: '/assets/loading.jpg',
+  attempt: 1
+})
 Vue.component('SearchInfo',SearchInfo);
 Vue.component('SearchInfo_item',SearchInfo_item);
 

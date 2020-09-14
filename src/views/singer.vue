@@ -1,7 +1,7 @@
 <template>
   <div class="home page" id="playListTag">
     <div class="header">
-      <i class="iconfont icon-zuo" @click="$router.replace('/playListPlaza')"></i>
+      <i class="iconfont icon-zuo" @click="$router.replace('/')"></i>
       <p>
         <span class="songName">歌手</span>
       </p>
@@ -11,7 +11,7 @@
       <div>
         <ul class="singer">
            <li v-for="item in singer" :key="item.id" @click="toSinger(item.id)">
-            <img :src="item.picUrl" alt="">
+            <img v-lazy="item.picUrl" alt="">
             <span>{{item.name}}</span>
            </li>
         </ul>
