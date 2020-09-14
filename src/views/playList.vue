@@ -1,46 +1,52 @@
 <template>
   <div class="home page" id="playList">
-    <div class="header">
-      <div class="left">
-        <i class="iconfont icon-zuo" @click="$router.back()"></i>
-        <span>歌单</span>
-      </div>
-      <div class="right">
-        <i class="iconfont icon-fangdajing"></i>
-        <i class="iconfont icon-dian"></i>
-      </div>
-    </div>
-    <div class="info">
-      <img :src="coverImgUrl" alt />
-      <div class="py">
-        <h2>{{name}}</h2>
-        <div class="user">
-          <img :src="creator.avatarUrl" alt />
-          <span>{{creator.creatorName}}</span>
+    <div class="bg">
+      <div class="showImg" :style="{background:`url(${coverImgUrl})`}"></div>
+      <div class="mask"></div>
+      <div class="con">
+        <div class="header">
+          <div class="left">
+            <i class="iconfont icon-zuo" @click="$router.back()"></i>
+            <span>歌单</span>
+          </div>
+          <div class="right">
+            <i class="iconfont icon-fangdajing"></i>
+            <i class="iconfont icon-dian"></i>
+          </div>
         </div>
-        <p>{{description}}</p>
-      </div>
-    </div>
+        <div class="info">
+          <img :src="coverImgUrl" alt />
+          <div class="py">
+            <h2>{{name}}</h2>
+            <div class="user">
+              <img :src="creator.avatarUrl" alt />
+              <span>{{creator.creatorName}}</span>
+            </div>
+            <p>{{description}}</p>
+          </div>
+        </div>
 
-    <div class="op">
-      <ul>
-        <li>
-          <i class="iconfont icon-pinglun"></i>
-          <span>207</span>
-        </li>
-        <li>
-          <i class="iconfont icon-SHARE"></i>
-          <span>207</span>
-        </li>
-        <li>
-          <i class="iconfont icon-xiazai"></i>
-          <span>下载</span>
-        </li>
-        <li>
-          <i class="iconfont icon-duoxuan"></i>
-          <span>多选</span>
-        </li>
-      </ul>
+        <div class="op">
+          <ul>
+            <li>
+              <i class="iconfont icon-pinglun"></i>
+              <span>207</span>
+            </li>
+            <li>
+              <i class="iconfont icon-SHARE"></i>
+              <span>207</span>
+            </li>
+            <li>
+              <i class="iconfont icon-xiazai"></i>
+              <span>下载</span>
+            </li>
+            <li>
+              <i class="iconfont icon-duoxuan"></i>
+              <span>多选</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
     <div class="animate__animated animate__zoomOutDown ani" :style="style" v-if="isAni">
       <i class="iconfont icon-yinyue"></i>
@@ -119,9 +125,7 @@ export default {
       return this.active ? this.musicHotComment : this.musicComment;
     },
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     toggleDate(time) {
       //加载评论时间
@@ -174,6 +178,37 @@ export default {
   z-index: 100;
   background-color: #95939e;
 }
+.showImg{
+ background: url("http://p1.music.126.net/jsDm1J1ZBcGQdTUExVz79w==/109951165203358128.jpg");
+   background-size: cover;
+    filter: blur(100px);
+  height: 100%;
+}
+.bg {
+  height: 900px;
+ 
+  position: relative;
+}
+.con {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.mask {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  background: rgba(0,0,0,.5);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: multiply;
+
+  filter: blur(0px);
+}
 .header {
   display: flex;
   padding: 100px 50px;
@@ -210,6 +245,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
     h2 {
       font-size: 50px;
       font-weight: normal;
@@ -217,6 +253,10 @@ export default {
     p {
       font-size: 32px;
       color: #d4d5da;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
     }
     .user {
       display: flex;

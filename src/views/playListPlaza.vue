@@ -100,7 +100,31 @@ export default {
       active: 0,
     };
   },
-  mounted() {},
+  mounted() {
+     this.$nextTick(() => {
+          if(this.swiper){
+              this.swiper.update()
+          }else{
+              this.swiper =  new Swiper(this.$refs.swiper, {
+          effect: "coverflow",
+          grabCursor: true,
+          centeredSlides: true,
+          slidesPerView: "auto",
+          coverflowEffect: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows: true,
+          },
+
+        });
+       
+          }
+        this.swiper.slideTo(1)
+        
+      });
+  },
   watch: {
     playlist(newVal) {
       this.$nextTick(() => {

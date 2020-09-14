@@ -116,7 +116,7 @@ export default {
       this.$store.commit("music/updatePlay", true);
       this.$store.commit("playMusicList/updateList", {
         listName: this.name,
-        list: this.trackIds,
+        list: this.singerMusic.map(item => item.id),
         index,
       });
       setTimeout(() => {
@@ -205,7 +205,7 @@ export default {
 }
 .header {
   color: #fff;
-  border-radius: 20px;
+
   background: linear-gradient(rgba(110, 110, 110, 0.4), rgba(255, 255, 255, 0));
   display: flex;
   padding: 100px 50px;

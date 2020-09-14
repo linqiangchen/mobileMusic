@@ -13,7 +13,7 @@
         <ul class="official">
           <li v-for="item in officialList" :key="item.id" @click="loadPlayList(item.id)">
             <div class="left">
-              <img :src="item.coverImgUrl" alt />
+              <img v-lazy="item.coverImgUrl" alt />
               <div class="coun">
                 <span>{{item.updateFrequency}}</span>
               </div>
@@ -30,7 +30,7 @@
         <ul class="other">
           <li v-for="item in otherList" :key="item.id" @click="loadPlayList(item.id)">
             <div class="left">
-              <img :src="item.coverImgUrl" alt />
+              <img v-lazy="item.coverImgUrl" alt />
               <div class="coun">
                 <span>{{item.updateFrequency}}</span>
               </div>
