@@ -104,16 +104,14 @@ export default {
   bottom: 0;
   width: 100%;
   z-index: 100;
-  padding: 0 45px;
+ 
   background-color: #fff;
 }
 .coun {
   position: absolute;
   text-align: left;
-
   height: 70px;
   line-height: 70px;
-
   width: 100%;
   text-indent: 20px;
   bottom: 10px;
@@ -127,6 +125,7 @@ export default {
   bottom: 150px;
 }
 .header {
+   padding: 0 45px;
   display: flex;
   align-items: center;
   height: 120px;
@@ -140,6 +139,7 @@ export default {
 }
 .list {
   h2 {
+     padding: 0 45px;
     font-size: 40px;
     font-weight: normal;
     color: #333;
@@ -149,6 +149,7 @@ export default {
     margin: 10px 0;
   }
   .official {
+     padding: 0 45px;
     li {
       display: flex;
       margin: 20px 0;

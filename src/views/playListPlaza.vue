@@ -19,7 +19,7 @@
         </li>
       </ul>
     </div>
-    <iscroll-view class="content" @scrollStart="log">
+    <iscroll-view class="content" @scrollStart="log" ref="iscroll">
       <div>
         <div class="swiper-container" ref="swiper">
           <div class="swiper-wrapper">
@@ -56,15 +56,13 @@
 <script>
 // @ is an alias to /src
 import Vue from "vue";
-import { Swipe, SwipeItem } from "vant";
 import { Tab, Tabs } from "vant";
 import { mapState } from "vuex";
 
 Vue.use(Tab);
 Vue.use(Tabs);
 import axios from "axios";
-Vue.use(Swipe);
-Vue.use(SwipeItem);
+
 export default {
   name: "Home",
   components: {},
@@ -122,7 +120,7 @@ export default {
        
           }
         this.swiper.slideTo(1)
-        
+        this.$refs.iscroll.scrollTo(0,0,300);
       });
   },
   watch: {
@@ -148,7 +146,7 @@ export default {
        
           }
         this.swiper.slideTo(1)
-        
+         this.$refs.iscroll.scrollTo(0,0,300);
       });
     },
   },
@@ -182,10 +180,12 @@ export default {
       this.$store.dispatch('playList/loadPlayList',id)
     },
     change(num){
-        if(num>10000){
+      if(num>10000 && num<100000000){
             return parseInt(num/10000) + '万'
+        }else if(num>=100000000){
+            return parseInt(num/100000000) + '亿'
         }else{
-            return num
+          return num
         }
     },
     toggle(index) {

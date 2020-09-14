@@ -10,6 +10,7 @@
         <span @click="$router.push('/playListPlaza')">{{item.title }}</span>
       </van-tab>
     </van-tabs>
+    
   </div>
 </template>
 

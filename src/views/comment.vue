@@ -39,7 +39,7 @@
                     <i class="iconfont icon-zan"></i>
                   </p>
                 </div>
-                <p class="_conment">{{item.content}}</p>
+                <pre class="_conment">{{item.content}}</pre>
               </div>
             </li>
           </ul>
@@ -257,6 +257,8 @@ export default {
           }
         }
         ._conment {
+          white-space: pre-wrap;
+word-wrap: break-word;
           font-size: 40px;
           color: #333;
           text-align: left;

@@ -1,8 +1,7 @@
 <template>
   <div class="home page" id="playList">
-    <div class="bg">
-      <div class="showImg" :style="{background:`url(${coverImgUrl})`}"></div>
-      <div class="mask"></div>
+    <div class="bg" v-imgBlur="coverImgUrl" b-key="1">
+  
       <div class="con">
         <div class="header">
           <div class="left">
@@ -55,16 +54,16 @@
       <div class="left">
         <i class="iconfont icon-shipin"></i>
         <p>
-          <span>播放全部</span>
+          <span>播放全部 </span>
           <i>(共{{trackCount}}首)</i>
         </p>
       </div>
       <div class="right">
         <i class="iconfont icon-jiarushoucang"></i>
-        <span>{{playCount}}</span>
+        <span>{{change(playCount)}}</span>
       </div>
     </div>
-    <iscroll-view class="pl-content" @scrollStart="log">
+    <iscroll-view class="pl-content" @scrollStart="log" ref="iscroll">
       <div>
         <ul>
           <li
@@ -92,7 +91,7 @@
 
 <script>
 // @ is an alias to /src
-import { mapState } from "vuex";
+import { mapState,mapGetters} from "vuex";
 export default {
   name: "playList",
   components: {},
@@ -121,12 +120,35 @@ export default {
       playCount: (state) => state.playList.playCount,
       trackIds: (state) => state.playList.trackIds,
     }),
+    ...mapGetters({
+      loading: 'playList/loading'
+    }),
     showComList() {
       return this.active ? this.musicHotComment : this.musicComment;
     },
   },
   created() {},
+  watch:{
+    loading(newVal){
+      if(newVal){
+        this.$showLoading()
+        this.$refs.iscroll.scrollTo(0,0,0)
+        console.log('this.$refs.iscroll: ', this.$refs.iscroll);
+      }else{
+        this.$hideLoading()
+      }
+    }
+  },
   methods: {
+    change(num){
+        if(num>10000 && num<100000000){
+            return parseInt(num/10000) + '万'
+        }else if(num>=100000000){
+            return parseInt(num/100000000) + '亿'
+        }else{
+          return num
+        }
+    },
     toggleDate(time) {
       //加载评论时间
       let date = new Date(time);
@@ -179,7 +201,6 @@ export default {
   background-color: #95939e;
 }
 .showImg{
- background: url("http://p1.music.126.net/jsDm1J1ZBcGQdTUExVz79w==/109951165203358128.jpg");
    background-size: cover;
     filter: blur(100px);
   height: 100%;
@@ -196,19 +217,19 @@ export default {
   left: 0;
   right: 0;
 }
-.mask {
-  position: absolute;
-  width: 100%;
-  top: 0;
-  bottom: 0;
-  background: rgba(0,0,0,.5);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-blend-mode: multiply;
+// .mask {
+//   position: absolute;
+//   width: 100%;
+//   top: 0;
+//   bottom: 0;
+//   background: rgba(0,0,0,.5);
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-size: cover;
+//   background-blend-mode: multiply;
 
-  filter: blur(0px);
-}
+//   filter: blur(0px);
+// }
 .header {
   display: flex;
   padding: 100px 50px;
@@ -239,10 +260,12 @@ export default {
     width: 380px;
     height: 380px;
     border-radius: 20px;
+    margin-right: 20px;
   }
   .py {
-    margin-left: 60px;
+    
     display: flex;
+    
     flex-direction: column;
     justify-content: space-between;
 

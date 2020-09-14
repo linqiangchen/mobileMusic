@@ -210,10 +210,7 @@ export default {
     padding: 0 51px;
     z-index: 100;
 }
-#Search{
-   
-   
-}
+
 @keyframes slideIn {
   0% {
     transform: translateX(100%);

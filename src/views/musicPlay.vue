@@ -1,6 +1,8 @@
 <template>
   <div class="detail" @click.self="toggleShow">
-    <div>
+  <div class="bg"  :style="{background:`url(${musicImg}) center`,backgroundSize:'cover'}" ></div>
+  <div class="mask"></div>
+    <div class="con">
       <div class="header">
         <i class="iconfont icon-zuo" @click="$router.back()"></i>
         <p>
@@ -40,11 +42,11 @@
           </ul>
         </iscroll-view>
       </div>
-      <div class="musicImg" :class="{ani:isplay}" v-show="showImg" @click="toggleShow">
-        <img :src="musicImg" alt class="songs-img" />
-        <span></span>
-        <span></span>
-        <span></span>
+      <div class="musicImg" :class="{ani:newMusic}" v-show="showImg" @click="toggleShow" :style="{animationPlayState:aniState}">
+        <img :src="musicImg" alt class="songs-img"  :style="{animationPlayState:aniState}"/>
+        <span :style="{animationPlayState:aniState}"></span>
+        <span :style="{animationPlayState:aniState}"></span>
+        <span :style="{animationPlayState:aniState}"></span>
       </div>
       <div class="footer">
         <div class="musicCor fen">
@@ -95,8 +97,10 @@ export default {
       icon: "icon-shipin",
       lrcIndex: 0,
       lrcHeight: 0,
+      newMusic:true,
       lrcScroll: true,
       timer: "",
+      aniState:'paused',
       iScroll: null,
       showImg: false,
       showShare: false,
@@ -150,14 +154,21 @@ beforeRouteLeave (to, from, next) {
     isplay: {
       handler: function (newVal) {
         this.icon = newVal ? "icon-bofang3" : "icon-shipin";
+        this.aniState =  newVal ? 'running' :'paused'
       },
       immediate: true,
     },
     musicUrl() {
       this.$refs.iscroll.scrollTo(0, 0, 300);
+      this.newMusic = false;
+      setTimeout(()=>{
+        this.newMusic  = true
+      },100)
+      
     },
     width() {
       this.width = this.$refs.line.offsetWidth;
+      
     },
     "$parent.pt": {
       handler: function (newVal) {
@@ -314,6 +325,34 @@ beforeRouteLeave (to, from, next) {
     border-radius: 50%;
   }
 }
+.mask {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  background: rgba(0,0,0,.6);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: multiply;
+
+  filter: blur(0px);
+}
+.bg{
+   background-size: cover;
+    filter: blur(90px);
+  height: 100%;
+}
+.con{
+  color: #fff;
+  width: 100%;
+  padding: 0 54px;
+   position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 .ani span:nth-child(2) {
   // background-color: red;
   animation: music 3s linear infinite 0s;
@@ -341,7 +380,7 @@ beforeRouteLeave (to, from, next) {
     margin: 0 auto;
     font-size: 42px;
     // width: 80%;
-    color: #666;
+    color: #958f93;
     // padding: 0 80px;
     max-width: 80%;
     width: max-content;
@@ -353,7 +392,7 @@ beforeRouteLeave (to, from, next) {
   }
 
   .active {
-    color: maroon;
+    color: #fff;
   }
 }
 .musicImg {
@@ -370,22 +409,23 @@ beforeRouteLeave (to, from, next) {
     width: 690px;
     height: 690px;
     border-radius: 50%;
-    box-shadow: 0 0 10px maroon;
+    // box-shadow: 0 0 10px maroon;
   }
 }
 .detail {
   position: fixed;
-  padding: 0 54px;
+  color: #fff;
   top: 0;
   height: 100%;
   width: 100%;
   bottom: 0;
   z-index: 1000;
-  background-color: #ffdee9;
-  background-image: linear-gradient(291deg, #ffdee9 0%, #b5fffc 100%);
-  background-image: -webkit-linear-gradient(291deg, #ffdee9 0%, #b5fffc 100%);
-  background-image: -moz-linear-gradient(291deg, #ffdee9 0%, #b5fffc 100%);
-  background-image: -o-linear-gradient(291deg, #ffdee9 0%, #b5fffc 100%);
+  background-color: #fff;
+  // background-color: #ffdee9;
+  // background-image: linear-gradient(291deg, #ffdee9 0%, #b5fffc 100%);
+  // background-image: -webkit-linear-gradient(291deg, #ffdee9 0%, #b5fffc 100%);
+  // background-image: -moz-linear-gradient(291deg, #ffdee9 0%, #b5fffc 100%);
+  // background-image: -o-linear-gradient(291deg, #ffdee9 0%, #b5fffc 100%);
 }
 .header {
   height: 130px;
@@ -403,7 +443,7 @@ beforeRouteLeave (to, from, next) {
     white-space: nowrap;
     text-overflow: ellipsis;
     .songName {
-      color: #333;
+      color: #fff;
       font-size: 42px;
       overflow: hidden;
       white-space: nowrap;
@@ -412,13 +452,18 @@ beforeRouteLeave (to, from, next) {
     }
     span {
       font-size: 36px;
-      color: #666;
+       color: #958f93;
     }
   }
   i {
+    
+color: #fff;
     font-size: 70px;
   }
 }
+// i{
+//   color: #fff !important;
+// }
 .voices {
   margin-top: 10px;
   display: flex;
@@ -426,7 +471,7 @@ beforeRouteLeave (to, from, next) {
   align-items: center;
   i {
     font-size: 40px;
-    color: #444;
+     color: #cdcdcd;
     margin-right: 40px;
   }
 }
@@ -443,7 +488,7 @@ beforeRouteLeave (to, from, next) {
   .fen {
     margin-bottom: 20px;
     font-size: 58px;
-    color: #999;
+   color: #cdcdcd;
   }
   .line {
     background-color: #fff;
@@ -479,7 +524,7 @@ beforeRouteLeave (to, from, next) {
     align-items: center;
     span {
       font-size: 20px;
-      color: #444;
+       color: #958f93;
       margin: 0 20px;
     }
   }
@@ -488,7 +533,7 @@ beforeRouteLeave (to, from, next) {
     justify-content: space-around;
     align-items: center;
     i {
-      color: #444;
+      color: #cdcdcd;
       font-size: 72px;
     }
     .btn {
