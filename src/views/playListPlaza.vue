@@ -6,19 +6,22 @@
         <span class="songName">歌单广场</span>
       </p>
     </div>
-    <div class="navlist">
-      <ul>
-        <li
-          v-for="(item ,index) in navlist"
-          :key="item.path"
-          :class="{active:active === index}"
-          @click="toggle(index)"
-        >{{item.title}}</li>
-        <li>
-          <i class="iconfont icon-guangchang" @click="$router.replace('/playlistTag')"></i>
-        </li>
-      </ul>
+    <div class="navwrap">
+      <iscroll-view class="scroll-wrap" @scrollStart="log" ref="playListCat">
+        <ul class="cat-list">
+          <li
+            v-for="(item ,index) in navlist"
+            :key="index"
+            :class="{active:active === index}"
+            @click="toggle(index)"
+          >{{item.title}}</li>
+        </ul>
+      </iscroll-view>
+      <li>
+        <i class="iconfont icon-guangchang" @click="$router.replace('/playListPlaza/Tag')"></i>
+      </li>
     </div>
+
     <iscroll-view class="content" @scrollStart="log" ref="iscroll">
       <div>
         <div class="swiper-container" ref="swiper">
@@ -55,6 +58,7 @@
         </ul>
       </div>
     </iscroll-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -73,33 +77,93 @@ export default {
   components: {},
   data() {
     return {
-      navlist: [
+      my: [
         {
-          icon: "111",
           title: "推荐",
           path: "",
+          hot: false,
         },
         {
-          icon: "111",
           title: "官方",
           path: "?cat=官方",
+          hot: false,
         },
         {
-          icon: "111",
           title: "精品",
           path: "/highquality",
+          hot: false,
         },
         {
-          icon: "111",
           title: "华语",
           path: "?cat=华语",
+          hot: true,
         },
         {
-          icon: "111",
           title: "流行",
           path: "?cat=流行",
+          hot: true,
         },
+        {
+          title: "古风",
+          path: "?cat=古风",
+          hot: false,
+        },
+        {
+          title: "电子",
+          path: "?cat=电子",
+          hot: true,
+        },
+        {
+          title: "轻音乐",
+          path: "?cat=轻音乐",
+          hot: true,
+        },
+      
       ],
+      navlist: [
+        {
+          title: "推荐",
+          path: "",
+          hot: false,
+        },
+        {
+          title: "官方",
+          path: "?cat=官方",
+          hot: false,
+        },
+        {
+          title: "精品",
+          path: "/highquality",
+          hot: false,
+        },
+        {
+          title: "华语",
+          path: "?cat=华语",
+          hot: true,
+        },
+        {
+          title: "流行",
+          path: "?cat=流行",
+          hot: true,
+        },
+        {
+          title: "古风",
+          path: "?cat=古风",
+          hot: false,
+        },
+        {
+          title: "电子",
+          path: "?cat=电子",
+          hot: true,
+        },
+        {
+          title: "轻音乐",
+          path: "?cat=轻音乐",
+          hot: true,
+        },
+      
+      ],
+      newList:[],
       active: 0,
     };
   },
@@ -124,18 +188,26 @@ export default {
       }
       this.swiper.slideTo(1);
       this.$refs.iscroll.scrollTo(0, 0, 300);
+     
+        this.$refs.playListCat.iscroll.options.scrollX = true;
+        // this.$refs.singerName.iscroll.options.scrollX = true;
+   
     });
   },
   watch: {
-     loading(newVal) {
+    loading(newVal) {
       if (newVal) {
-        this.$showLoading(); 
+        this.$showLoading();
       } else {
         this.$hideLoading();
       }
     },
+    catList(newVal){
+      if(newVal.length>0){
+        this.navlist.push(...newVal)
+      }
+    },
     playlist(newVal) {
-      
       this.$nextTick(() => {
         if (this.swiper) {
           this.swiper.update();
@@ -162,6 +234,8 @@ export default {
   created() {
     this.$store.dispatch("recommend/loadBanner");
     this.$store.dispatch("recommend/loadPlayList");
+        this.$store.dispatch("recommend/loadCatList");
+    this.newList = this.navlist
   },
   computed: {
     ...mapState({
@@ -173,6 +247,7 @@ export default {
       trackIds: (state) => state.playList.trackIds,
       playCount: (state) => state.recommend.playCount,
       loading: (state) => state.recommend.loadPlayList,
+      catList: (state) => state.recommend.catList,
     }),
     topPlaylist() {
       return this.playlist.slice(0, 8);
@@ -183,6 +258,9 @@ export default {
   },
 
   methods: {
+    setMy(arr){
+      this.my = arr
+    },
     log(e) {
       e.refresh();
     },
@@ -233,38 +311,56 @@ export default {
     margin-right: 60px;
   }
 }
-.navlist {
-  ul {
-    display: flex;
-    padding: 0 45px;
-    justify-content: space-between;
-    font-size: 40px;
-    color: #707475;
-    height: 120px;
-    align-items: center;
-    border-bottom: 1px #707475 solid;
-    li {
-      height: 120px;
-      line-height: 120px;
-      i {
-        font-size: 40px;
-      }
-    }
-    .active {
-      color: #fe3a3b;
-      position: relative;
-    }
-    .active::before {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 6px;
-      border-radius: 3px;
-      background-color: #fe3a3b;
-      bottom: 0;
-    }
+.scroll-wrap {
+  flex: 1;
+  height: 120px;
+  overflow: hidden;
+  div {
+    width: max-content;
   }
 }
+.navwrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  i {
+    font-size: 40px;
+    margin: 0 20px;
+  }
+}
+
+.cat-list {
+  width: max-content;
+
+  padding: 0 45px;
+
+  font-size: 40px;
+  color: #707475;
+  height: 120px;
+
+  border-bottom: 1px #707475 solid;
+  li {
+    float: left;
+    height: 120px;
+    line-height: 120px;
+    margin:  0 40px;
+  }
+  .active {
+    color: #fe3a3b;
+    position: relative;
+  }
+  .active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background-color: #fe3a3b;
+    bottom: 0;
+  }
+}
+
 .list {
   // margin-top: 40px;
   display: flex;

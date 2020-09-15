@@ -70,6 +70,7 @@
             v-for="(item , index) in songsInfo"
             :key="item.id"
             @click="playMyMusic(item.id,index,$event)"
+            :class="{playActive:musicId === item.id}"
           >
             <p class="_w">{{index+1}}</p>
             <div>
@@ -119,6 +120,7 @@ export default {
       trackCount: (state) => state.playList.trackCount,
       playCount: (state) => state.playList.playCount,
       trackIds: (state) => state.playList.trackIds,
+      musicId: (state) => state.music.musicId,
     }),
     ...mapGetters({
       loading: 'playList/loading'
@@ -376,6 +378,15 @@ export default {
         width: 100px;
         height: 65px;
       }
+    }
+    .playActive{
+      div{
+        .name {
+color: maroon !important;
+        }
+ 
+      }
+     
     }
   }
 }

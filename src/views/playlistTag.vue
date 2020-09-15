@@ -6,18 +6,33 @@
         <span class="songName">歌单标签</span>
       </p>
     </div>
-    <iscroll-view class="content" @scrollStart="log">
+    <iscroll-view class="my-content" @scrollStart="log">
       <div>
         <div class="tagwrap">
-          <h2>我的歌单广场</h2>
+          <h2>
+            我的歌单广场
+           
+          </h2>
           <ul>
-            <li v-for="item in my" :key="item.title" @click="select(item.path)">  <i class="iconfont icon-wangzhanshouyereduicon--" v-if="item.hot"></i>{{item.title}}</li>
+            <li v-for="(item , index) in $parent.my" :key="item.title" @click.self="select(item.path)">
+              <i
+                class="iconfont icon-chushaixuanxiang addTag"
+                v-show="!addTag"
+                @click="deleteMy(index)"
+              ></i>
+              <i class="iconfont icon-wangzhanshouyereduicon--" v-if="item.hot"></i>
+              {{item.title}}
+            </li>
           </ul>
         </div>
         <div class="tagwrap">
           <h2>语种</h2>
           <ul>
-            <li v-for="item in lang" :key="item.title" @click="select(item.path)">  <i class="iconfont icon-wangzhanshouyereduicon--" v-if="item.hot"></i>{{item.title}}</li>
+            <li v-for="item in lang" :key="item.title" @click="select(item.path)">
+              <i class="iconfont icon-add-fill-copy addTag" v-show="!addTag"></i>
+              <i class="iconfont icon-wangzhanshouyereduicon--" v-if="item.hot"></i>
+              {{item.title}}
+            </li>
           </ul>
         </div>
         <div class="tagwrap">
@@ -25,6 +40,7 @@
           <ul>
             <li v-for="item in catList" :key="item.title" @click="select(item.path)">
               <i class="iconfont icon-wangzhanshouyereduicon--" v-if="item.hot"></i>
+              <i class="iconfont icon-add-fill-copy addTag" v-show="!addTag"></i>
               {{item.title}}
             </li>
           </ul>
@@ -40,76 +56,35 @@ import { mapState } from "vuex";
 export default {
   name: "playListTag",
   components: {},
-  inject: ["playMusic", "pauseMusic"],
+
   data() {
     return {
-      my: [
-        {
-          title: "推荐",
-          path: "",
-            hot:false
-        },
-        {
-          title: "官方",
-          path: "?cat=官方",
-           hot:false
-        },
-        {
-          title: "精品",
-          path: "/highquality",
-           hot:false
-        },
-        {
-          title: "华语",
-          path: "?cat=华语",
-          hot:true
-        },
-        {
-          title: "流行",
-          path: "?cat=流行",
-          hot:true
-        },
-        {
-          title: "古风",
-          path: "?cat=古风",
-           hot:false
-        },
-        {
-          title: "电子",
-          path: "?cat=电子",
-          hot:true
-        },
-        {
-          title: "轻音乐",
-          path: "?cat=轻音乐",
-          hot:true
-        },
-      ],
+      addTag: true,
       lang: [
         {
           title: "华语",
           path: "?cat=华语",
-          hot:true
+          hot: true,
         },
         {
           title: "欧美",
           path: "?cat=欧美",
-          hot:false
+          hot: false,
         },
         {
           title: "日语",
           path: "?cat=日语",
-           hot:false
+          hot: false,
         },
         {
           title: "韩语",
           path: "?cat=韩语",
-           hot:false
+          hot: false,
         },
         {
           title: "粤语",
           path: "?cat=粤语",
-           hot:false
+          hot: false,
         },
       ],
     };
@@ -123,9 +98,19 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch("recommend/loadCatList");
+
+    
   },
   methods: {
+    deleteMy(index) {
+      let arr =  this.$parent.my
+      arr.splice(index,1)
+      this.$parent.setMy(arr)
+    },
+    handleAdd() {
+      
+      this.addTag = !this.addTag;
+    },
     select(path) {
       this.$store.dispatch("recommend/loadPlayList", path);
       this.$router.push("/playListPlaza");
@@ -152,6 +137,17 @@ export default {
   padding: 0 45px;
   background-color: #fff;
 }
+.my-content {
+  padding: 0 45px;
+
+  width: 100%;
+  position: absolute;
+  top: 120px;
+  left: 0;
+  right: 0;
+  bottom: 150px;
+  overflow: hidden;
+}
 .header {
   display: flex;
   align-items: center;
@@ -165,7 +161,7 @@ export default {
   }
 }
 .tagwrap {
-  margin: 40px 0;
+  margin: 0 0 20px 0;
   h2 {
     font-size: 40px;
     font-weight: normal;
@@ -174,11 +170,16 @@ export default {
     height: 120px;
     line-height: 120px;
     margin: 10px 0;
+    i {
+      font-size: 40px;
+      color: #f57b7b;
+    }
   }
   ul {
     display: flex;
     flex-wrap: wrap;
     li {
+      position: relative;
       margin: 20px 10px;
       width: 225px;
       height: 106px;
@@ -188,10 +189,16 @@ export default {
       font-size: 35px;
       line-height: 106px;
       justify-content: center;
-      i{
+      .addTag {
+        position: absolute;
+        top: -50px;
+
+        right: 0px;
+      }
+      i {
         color: #f57b7b;
         font-size: 35px;
-        margin-right:   20px;
+        margin-right: 20px;
       }
       color: #333;
     }

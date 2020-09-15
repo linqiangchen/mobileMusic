@@ -30,7 +30,7 @@
         </ul>
       </div>
     </iscroll-view>
-    <iscroll-view class="content" @scrollStart="log">
+    <iscroll-view class="content" @scrollStart="log"  @pullUp="load" @pullDown="refresh">
       <div>
         <ul class="singer">
           <li v-for="item in singer" :key="item.id" @click="toSinger(item.id)">
@@ -156,6 +156,12 @@ export default {
     },
   },
   methods: {
+    load(){
+      console.log('loading.....');
+    },
+    refresh(){
+       console.log('refresh.....');
+    },
     handlePathByCat(index) {
       this.selectCat = index;
       if (this.selectLetter === -1) {

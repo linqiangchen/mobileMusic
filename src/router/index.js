@@ -40,14 +40,16 @@ Vue.use(VueRouter)
     path: '/playListPlaza',
     name: 'playListPlaza',
     component: () => import(/* webpackChunkName: "playListPlaza" */ '../views/playListPlaza.vue'),
-   
+    children:[
+      {
+        path: 'Tag',
+        name: 'playlistTag',
+        component: () => import(/* webpackChunkName: "playListTag" */ '../views/playlistTag.vue'),
+       
+      },
+    ]
   },
-  {
-    path: '/playlistTag',
-    name: 'playlistTag',
-    component: () => import(/* webpackChunkName: "playListTag" */ '../views/playlistTag.vue'),
-   
-  },
+  
   {
     path: '/detail',
     name: 'Home',

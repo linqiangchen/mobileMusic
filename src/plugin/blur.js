@@ -17,8 +17,8 @@ export default {
                 divMask = document.createElement('div');
                 keyList.push(key)         
             } else{
-                 divImg = document.querySelector(`._mybg${key}`) 
-                 divMask = document.querySelector(`._my_mask${key}`) 
+                 divImg = document.querySelector(`._mybg${key}`) || document.createElement('div');
+                 divMask = document.querySelector(`._my_mask${key}`) || document.createElement('div');
             }    
             rest[0].classList.add('blur')
             divMask.classList.add(`my_mask` ,`_my_mask${key}`)
