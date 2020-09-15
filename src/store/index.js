@@ -6,6 +6,7 @@ import search from './module/search'
 import playList from './module/playList'
 import playMusicList from './module/playMusicList'
 import recommend from './module/recommend'
+import mv from './module/mv'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -19,6 +20,7 @@ state:{
     search,
     playList,
     playMusicList,
-    recommend
+    recommend,
+    mv
   }
 })

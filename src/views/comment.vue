@@ -11,7 +11,8 @@
       <img :src="musicImg" alt />
       <p>
         <span class="mn">{{musicName}}</span>
-        <span>{{musicSonger}}</span>
+        <span> <i v-for="item in musicSonger" :key="item.id" @click="toSinger(item.id)">{{item.name}} </i></span>
+       
       </p>
       <i class="iconfont icon-you" @click="$router.back()"></i>
     </div>
@@ -24,10 +25,10 @@
         </ul>
       </div>
       <div class="commentList">
-        <iscroll-view class="com-content" @scrollStart="log">
+        <iscroll-view class="com-content" @scrollStart="log" @pullUp="load" @pullDown="reflsh">
           <ul>
             <li v-for="(item , index) in showComList" :key="index">
-              <img :src="item.user.avatar" alt />
+              <img v-lazy="item.user.avatar" alt />
               <div class="con">
                 <div class="userInfo">
                   <p class="_user">
@@ -59,6 +60,7 @@ export default {
     return {
       banner: [],
       active: true,
+      offset:1
     };
   },
   computed: {
@@ -69,14 +71,29 @@ export default {
       musicSonger: (state) => state.music.musicSonger,
       musicImg: (state) => state.music.musicImg,
       total: (state) => state.music.total,
+      loadMore:(state) => state.music.loadMore,
       // pt: (state) => state.music.pt,
     }),
     showComList() {
       return this.active ? this.musicHotComment : this.musicComment;
     },
   },
+  watch:{
+    loadMore(newVal) {
+      if (newVal) {
+        this.$showLoading();
+   
+      } else {
+        this.$hideLoading();
+      }
+    },
+  },
   created() {},
   methods: {
+     toSinger(id) {
+      this.$store.dispatch("recommend/loadSingerMusic", id);
+      this.$router.replace("/singerMusic");
+    },
     toggleDate(time) {
       //加载评论时间
       let date = new Date(time);
@@ -88,7 +105,14 @@ export default {
     toggle(bool) {
       this.active = bool;
     },
-    load() {},
+    reflsh(){
+        this.$store.dispatch('music/loadMore',this.offset);
+        this.offset++
+    },
+    load() {
+        this.$store.dispatch('music/loadMore',this.offset);
+        this.offset++
+    },
     log(e) {
       e.refresh();
     },
@@ -168,14 +192,18 @@ export default {
     font-size: 35px;
     color: #557ba8;
     overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     .mn {
       font-size: 50px;
       color: #333;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+    i{
+      font-style: normal;
+      color: #557ba8;
     }
   }
   i {
@@ -258,7 +286,7 @@ export default {
         }
         ._conment {
           white-space: pre-wrap;
-word-wrap: break-word;
+          word-wrap: break-word;
           font-size: 40px;
           color: #333;
           text-align: left;

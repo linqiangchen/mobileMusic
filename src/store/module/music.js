@@ -57,13 +57,15 @@ export default {
         total:'',
         api: 'http://www.eveal.cn:3003',
         pt:0,
-        isPlay:false
+        isPlay:false,
+        loadMore:false,
     },
     mutations: {
         updateMusicUrl(state, obj) {//加载歌曲信息
+            console.log(obj)
             state.musicDt = obj.dt
             state.musicId = obj.id
-            state.musicSonger = obj.ar.map(item => item.name).join('/')
+            state.musicSonger = obj.ar.map(item => ({name:item.name,id:item.id}))
             state.musicImg = obj.al.picUrl
             state.musicName = obj.name
         },
@@ -83,18 +85,24 @@ export default {
         },
         updatePlay(state, bool){//更新播放状态
             state.isPlay = bool
+        },
+        updateComments(state, obj){
+            state.musicComment.push(...obj)
+        },
+        updateLoadMore(state, bool){
+            state.loadMore = bool
         }
     },
     actions: {
         loadMusicUrl(context, id) {//请求数据
             axios.get(context.state.api + '/song/detail?ids=' + id).then(res => {//歌曲信息
-                // console.log( res.data.songs[0])
+                // 
                 context.commit('updateMusicUrl', res.data.songs[0])
             })
             axios.get(context.state.api + '/song/url?id=' + id).then(res => {//播放地址
                 context.commit('updatePlayUrl', res.data.data[0].url)
             })
-            axios.get(context.state.api + '/comment/music?&limit=100&id=' + id).then(res => {//歌曲评论
+            axios.get(context.state.api + '/comment/music?&limit=20&id=' + id).then(res => {//歌曲评论
                 // 
                const hotComments =  res.data.hotComments.map(item => ({
                    time:item.time,
@@ -128,6 +136,25 @@ export default {
                 context.commit('updateMusicLyric', lr)
             })
             
+        },
+        loadMore(context,offset){
+            context.commit('updateLoadMore', true)
+            axios.get(context.state.api + `/comment/music?&limit=20&offset=${offset}&id=${context.state.musicId}`).then(res => {//歌曲评论
+                // 
+         
+               const comments =  res.data.comments.map(item => ({
+                time:item.time,
+                liked:item.likedCount,
+                content:item.content,
+                user:{
+                    name:item.user.nickname,
+                    avatar:item.user.avatarUrl,
+                }
+                
+            }))
+                context.commit('updateComments', comments)
+                context.commit('updateLoadMore', false)
+            })
         }
     }
 }

@@ -13,6 +13,18 @@ Vue.use(VueRouter)
    
   },
   {
+    path: '/mv',
+    name: 'mv',
+    component:()=> import(/* webpackChunkName: "playList" */ '../views/myMv.vue'),
+   
+  },
+  {
+    path: '/mvPlay',
+    name: 'mvPlay',
+    component:()=> import(/* webpackChunkName: "playList" */ '../views/mvPlay.vue'),
+   
+  },
+  {
     path: '/playList',
     name: 'playList',
     component: () => import(/* webpackChunkName: "playList" */ '../views/playList.vue'),

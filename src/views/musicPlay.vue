@@ -1,7 +1,6 @@
 <template>
-  <div class="detail" @click.self="toggleShow">
-  <div class="bg"  :style="{background:`url(${musicImg}) center`,backgroundSize:'cover'}" ></div>
-  <div class="mask"></div>
+  <div class="detail" @click.self="toggleShow" v-blur='musicImg'>
+
     <div class="con">
       <div class="header">
         <i class="iconfont icon-zuo" @click="$router.back()"></i>
@@ -66,7 +65,7 @@
           <span>{{endTime}}</span>
         </div>
         <div class="musicCor">
-          <i class="iconfont icon-xin"></i>
+          <i class="iconfont " @click="changeOrder" :class="orderIcon"></i>
           <i class="iconfont icon-shangyishou" @click="prev"></i>
           <i class="iconfont btn" :class="icon" @click="play"></i>
           <i class="iconfont icon-xiayishou" @click="next"></i>
@@ -104,6 +103,7 @@ export default {
       iScroll: null,
       showImg: false,
       showShare: false,
+      orderIcon:'icon-shunxubofang',
       options: [
         { name: "微信", icon: "wechat" },
         { name: "微博", icon: "weibo" },
@@ -119,13 +119,14 @@ export default {
       musicUrl: (state) => state.music.musicUrl,
       musicImg: (state) => state.music.musicImg,
       musicName: (state) => state.music.musicName,
-      musicSonger: (state) => state.music.musicSonger,
+       musicSonger: (state) => state.music.musicSonger.map(item => item.name).join('/'),
       musicDt: (state) => state.music.musicDt,
       musicLyric: (state) => state.music.musicLyric,
       isplay: (state) => state.music.isPlay,
       isplay: (state) => state.music.isPlay,
       list: (state) => state.playMusicList.list,
       curIndex: (state) => state.playMusicList.curIndex,
+      myOrder: (state) => state.playMusicList.order,
       // pt: (state) => state.music.pt,
     }),
     curTime() {
@@ -157,6 +158,16 @@ beforeRouteLeave (to, from, next) {
         this.aniState =  newVal ? 'running' :'paused'
       },
       immediate: true,
+    },
+    myOrder(newVal){
+        switch(newVal){
+          case 0 : this.orderIcon = "icon-shunxubofang"
+          break;
+          case 1: this.orderIcon = "icon-bofangye-caozuolan-suijibofang"
+          break;
+          case 2: this.orderIcon = "icon-danquxunhuan"
+          break;
+        }
     },
     musicUrl() {
       this.$refs.iscroll.scrollTo(0, 0, 300);
@@ -231,6 +242,10 @@ beforeRouteLeave (to, from, next) {
     });
   },
   methods: {
+    changeOrder(){
+      this.$store.commit('playMusicList/updateOrder',(this.myOrder+1)%3)
+      console.log('(this.myOrder++)%3: ', (this.myOrder + 1)%3);
+    },
     onSelect(option) {
       Toast(option.name);
       this.showShare = false;
@@ -325,25 +340,7 @@ beforeRouteLeave (to, from, next) {
     border-radius: 50%;
   }
 }
-.mask {
-  position: absolute;
-  width: 100%;
-  top: 0;
-  bottom: 0;
-  background: rgba(0,0,0,.6);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-blend-mode: multiply;
 
-  filter: blur(0px);
-}
-.bg{
-   background-size: cover;
-    filter: blur(90px);
-  height: 100%;
-  overflow: hidden;
-}
 .con{
   color: #fff;
   width: 100%;

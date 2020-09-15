@@ -5,11 +5,11 @@
         <img :src="item" alt />
       </van-swipe-item>
     </van-swipe>
-    <van-tabs class="tab">
-      <van-tab v-for=" item  in navlist " :key="item.path" :title="item.title">
-        <span @click="$router.push('/playListPlaza')">{{item.title }}</span>
-      </van-tab>
-    </van-tabs>
+    <div class="nav">
+      <ul>
+      <li v-for="item in navlist" :key="item.title" @click="$router.push(item.path)">{{item.title}}
+      </li></ul>
+    </div>
     
   </div>
 </template>
@@ -33,34 +33,15 @@ export default {
       navlist: [
         {
           icon: "111",
-          title: "每日推荐",
-          path: "/day",
+          title: "歌手",
+          path: "/singer",
         },
         {
           icon: "111",
-          title: "私人FM",
-          path: "/FM",
+          title: "排行",
+          path: "/topList",
         },
-        {
-          icon: "111",
-          title: "歌单",
-          path: "/playlist",
-        },
-        {
-          icon: "111",
-          title: "排行榜",
-          path: "/rist",
-        },
-        {
-          icon: "111",
-          title: "直播",
-          path: "/46456",
-        },
-        {
-          icon: "111",
-          title: "电台",
-          path: "/65464",
-        },
+       
       ],
     };
   },
@@ -83,6 +64,14 @@ export default {
 <style lang="scss" scoped>
 .home {
   font-size: 0.16rem;
+}
+.nav{
+  ul{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    font-size: 40px;
+  }
 }
 .tab,
 .van-tab {

@@ -4,7 +4,8 @@ export default {
     state: {
        listName:'',
        list:[],
-       curIndex:''
+       curIndex:'',
+       order:0
     },
     mutations: {
         updateList(state, obj) {
@@ -13,7 +14,15 @@ export default {
             state.curIndex = obj.index
         },
         updateIndex(state,obj){
-            state.curIndex = obj
+            if(state.order === 1){
+                state.curIndex = parseInt( Math.random()*state.list.length)
+            }else{
+                state.curIndex = obj
+            }
+           
+        },
+        updateOrder(state,num){
+            state.order = num
         }
     },
 }

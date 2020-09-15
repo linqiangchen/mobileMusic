@@ -15,8 +15,8 @@ import blur from './plugin/blur'
 import loading from './plugin'
 Vue.use(ShareSheet);
 Vue.use(blur,{
-  blur: 100,
-  maskColor: 'rgba(0,0,0,.5)'
+  blur: 50,
+  maskColor: 'rgba(0,0,0,.4)'
 })
 Vue.use(loading)
 Vue.use(IScrollView, IScroll)

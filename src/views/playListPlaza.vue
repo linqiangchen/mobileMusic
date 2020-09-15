@@ -118,7 +118,6 @@ export default {
           path: "?cat=轻音乐",
           hot: true,
         },
-      
       ],
       navlist: [
         {
@@ -161,9 +160,8 @@ export default {
           path: "?cat=轻音乐",
           hot: true,
         },
-      
       ],
-      newList:[],
+      newList: [],
       active: 0,
     };
   },
@@ -188,10 +186,9 @@ export default {
       }
       this.swiper.slideTo(1);
       this.$refs.iscroll.scrollTo(0, 0, 300);
-     
-        this.$refs.playListCat.iscroll.options.scrollX = true;
-        // this.$refs.singerName.iscroll.options.scrollX = true;
-   
+
+      this.$refs.playListCat.iscroll.options.scrollX = true;
+      // this.$refs.singerName.iscroll.options.scrollX = true;
     });
   },
   watch: {
@@ -202,9 +199,9 @@ export default {
         this.$hideLoading();
       }
     },
-    catList(newVal){
-      if(newVal.length>0){
-        this.navlist.push(...newVal)
+    catList(newVal) {
+      if (newVal.length > 0) {
+        this.navlist.push(...newVal);
       }
     },
     playlist(newVal) {
@@ -234,8 +231,8 @@ export default {
   created() {
     this.$store.dispatch("recommend/loadBanner");
     this.$store.dispatch("recommend/loadPlayList");
-        this.$store.dispatch("recommend/loadCatList");
-    this.newList = this.navlist
+    this.$store.dispatch("recommend/loadCatList");
+    this.newList = this.navlist;
   },
   computed: {
     ...mapState({
@@ -258,8 +255,8 @@ export default {
   },
 
   methods: {
-    setMy(arr){
-      this.my = arr
+    setMy(arr) {
+      this.my = arr;
     },
     log(e) {
       e.refresh();
@@ -343,7 +340,7 @@ export default {
     float: left;
     height: 120px;
     line-height: 120px;
-    margin:  0 40px;
+    margin: 0 40px;
   }
   .active {
     color: #fe3a3b;

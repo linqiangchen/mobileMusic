@@ -13,8 +13,10 @@ export default {
         description: '',
         songsInfo: [],
         trackCount: '',
+        moreList:[],
         loadPlayListInfo:false,
         loadPlayListMusic:false,
+        loadMore:false,
     },
     getters: {
         loading(state){
@@ -34,15 +36,23 @@ export default {
             state.trackCount = obj.trackCount
             state.playCount = obj.playCount
         },
+        updateSongInfo(state, obj){
+            if(obj){
+                state.songsInfo.push(...obj)
+            }
+           
+        },
         loadingInfo(state,bool){
             state.loadPlayListInfo = bool
+        },
+        updateloadMore(state,bool){
+            state.loadMore = bool
         },
         loadingMusic(state,bool){
             state.loadPlayListMusic = bool
         },
     },
     actions: {
-        
         loadPlayList(context, id) { //请求歌单
             context.commit('loadingInfo',true)
             context.commit('loadingMusic',true)
@@ -55,7 +65,7 @@ export default {
                     playCount: res.data.playlist.playCount,
                     tag: res.data.playlist.tags,
                     description: res.data.playlist.description,
-                    trackIds: res.data.playlist.trackIds.map(item => item.id).slice(0, 100),
+                    trackIds: res.data.playlist.trackIds.map(item => item.id),
                     creator: {
                         creatorName: res.data.playlist.creator.nickname,
                         signature: res.data.playlist.creator.signature,
@@ -64,7 +74,9 @@ export default {
                     }
                 }
                 axios.get(context.state.api + '/song/detail?ids=' + playlist.trackIds.slice(0, 100).join(',')).then(res => {
+                    
                     playlist.songsInfo = res.data.songs.map(item => ({
+                        
                         id: item.id,
                         name: item.name,
                         artists: item.ar.map(({
@@ -82,6 +94,28 @@ export default {
             })
 
 
+        },
+        loadMore(context, index){
+            
+            context.commit('updateloadMore',true)
+          
+            axios.get(context.state.api + '/song/detail?ids=' + context.state.trackIds.slice(index, index+50).join(',')).then(res => { 
+               let songsInfo = res.data.songs.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    artists: item.ar.map(({
+                        name
+                    }) => name).join('/'),
+                    alias: item.alia.join(''),
+                    album: item.al.name,
+                    songsCount: 50
+                }))
+                
+                context.commit('updateSongInfo', songsInfo)
+                
+                context.commit('updateloadMore',false)
+               
+            })
         }
 
 

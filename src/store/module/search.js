@@ -34,7 +34,7 @@ export default{
                 
             })
             .catch(error=>{
-                console.log('请求失败了...');
+                
             })
         },
         sugKey(context,payload){
@@ -48,7 +48,7 @@ export default{
 
             })
             .catch(error=>{
-                console.log('请求失败了...');
+                
             })
         },
         topList(context){
@@ -60,7 +60,7 @@ export default{
                   const List = data.data
                   
                  
-                //   console.log(List);
+                //   
                 context.commit('topList',List);
                
                }
@@ -68,8 +68,8 @@ export default{
 
             })
             .catch(error=>{
-                console.log('请求失败了...');
-                console.log(error);
+                
+                
             })
         },
         songInfo(context,payload){
@@ -81,7 +81,7 @@ export default{
                const info = res.data.result.songs;
                //歌曲总数
                const songsCount = res.data.result.songCount
-            //    console.log(songsCount);
+            //    
                //过滤数据 每个item都是一个对象，map返回新数组，每个元素也是对象
                const songInfo= info.map(item=>{
                 var arr= item.artists.map(item=>{
@@ -97,13 +97,13 @@ export default{
                         songsCount:songsCount
                     }
                 })
-                console.log(songInfo);
+                
                 context.commit('songInfo',songInfo);
 
             })
             .catch(error=>{
-                console.log('请求失败了...');
-                console.log(error);
+                
+                
             })
         },
        

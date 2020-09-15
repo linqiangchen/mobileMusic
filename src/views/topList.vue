@@ -18,7 +18,6 @@
                 <span>{{item.updateFrequency}}</span>
               </div>
             </div>
-
             <div class="right">
               <p v-for="(list ,index) in item.tracks" :key="index">
                 <span>{{list.first + ' - ' + list.second}}</span>

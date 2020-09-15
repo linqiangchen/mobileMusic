@@ -1,7 +1,6 @@
 <template>
   <div class="home page" id="playList">
-    <div class="bg" v-imgBlur="coverImgUrl" b-key="1">
-  
+    <div class="bg" v-blur="coverImgUrl" >
       <div class="con">
         <div class="header">
           <div class="left">
@@ -9,7 +8,15 @@
             <span>歌单</span>
           </div>
           <div class="right">
-            <i class="iconfont icon-fangdajing"></i>
+            <input
+              type="text"
+              v-show="true"
+              class="inp"
+              v-model="searchWorld"
+              placeholder="搜索歌单内歌曲"
+              @input="search"
+            />
+            <i class="iconfont icon-fangdajing" @click="search"></i>
             <i class="iconfont icon-dian"></i>
           </div>
         </div>
@@ -54,7 +61,7 @@
       <div class="left">
         <i class="iconfont icon-shipin"></i>
         <p>
-          <span>播放全部 </span>
+          <span>播放全部</span>
           <i>(共{{trackCount}}首)</i>
         </p>
       </div>
@@ -63,11 +70,11 @@
         <span>{{change(playCount)}}</span>
       </div>
     </div>
-    <iscroll-view class="pl-content" @scrollStart="log" ref="iscroll">
+    <iscroll-view class="pl-content" @scrollStart="log" ref="iscroll" @pullUp="load">
       <div>
         <ul>
           <li
-            v-for="(item , index) in songsInfo"
+            v-for="(item , index) in showList"
             :key="item.id"
             @click="playMyMusic(item.id,index,$event)"
             :class="{playActive:musicId === item.id}"
@@ -92,7 +99,7 @@
 
 <script>
 // @ is an alias to /src
-import { mapState,mapGetters} from "vuex";
+import { mapState, mapGetters } from "vuex";
 export default {
   name: "playList",
   components: {},
@@ -100,8 +107,10 @@ export default {
   data() {
     return {
       banner: [],
+      searchWorld: "",
       active: true,
       isAni: false,
+      showList: [],
       style: {
         top: 0,
         left: 0,
@@ -121,35 +130,72 @@ export default {
       playCount: (state) => state.playList.playCount,
       trackIds: (state) => state.playList.trackIds,
       musicId: (state) => state.music.musicId,
+      loadMore: (state) => state.playList.loadMore,
     }),
     ...mapGetters({
-      loading: 'playList/loading'
+      loading: "playList/loading",
     }),
     showComList() {
       return this.active ? this.musicHotComment : this.musicComment;
     },
   },
   created() {},
-  watch:{
-    loading(newVal){
-      if(newVal){
-        this.$showLoading()
-
-        
-      }else{
-        this.$hideLoading()
+  beforeRouteLeave (to, from, next) {
+    // ...
+    this.searchWorld = ""
+    next();
+  },
+  watch: {
+    loading(newVal) {
+      if (newVal) {
+        this.$showLoading();
+        this.$refs.iscroll.scrollTo(0, 0, 0);
+      } else {
+        this.$hideLoading();
       }
-    }
+    },
+    loadMore(newVal) {
+      if (newVal) {
+        this.$showLoading();
+   
+      } else {
+        this.$hideLoading();
+      }
+    },
+    songsInfo: {
+      handler(newVal) {
+        if (newVal.length > 0) {
+          this.showList = newVal;
+        }
+      },
+      immediate: true,
+    },
   },
   methods: {
-    change(num){
-        if(num>10000 && num<100000000){
-            return parseInt(num/10000) + '万'
-        }else if(num>=100000000){
-            return parseInt(num/100000000) + '亿'
-        }else{
-          return num
-        }
+    load(){
+      if(this.trackCount <= this.songsInfo.length){
+        return
+      }
+      this.$store.dispatch('playList/loadMore',this.songsInfo.length)
+    },
+    search() {
+      this.showList = this.songsInfo.filter(
+        (item) =>
+          item.name.indexOf(this.searchWorld.trim()) != -1 ||
+          item.artists.indexOf(this.searchWorld.trim()) != -1 ||
+          item.album.indexOf(this.searchWorld.trim()) != -1
+      );
+
+      this.$refs.iscroll.scrollTo(0, 0, 0);
+    },
+    change(num) {
+      if (num > 10000 && num < 100000000) {
+        return parseInt(num / 10000) + "万";
+      } else if (num >= 100000000) {
+        return parseInt(num / 100000000) + "亿";
+      } else {
+        return num;
+      }
     },
     toggleDate(time) {
       //加载评论时间
@@ -183,7 +229,7 @@ export default {
     toggle(bool) {
       this.active = bool;
     },
-    load() {},
+   
     log(e) {
       e.refresh();
     },
@@ -202,17 +248,18 @@ export default {
   z-index: 100;
   background-color: #95939e;
 }
-.showImg{
-   background-size: cover;
-    filter: blur(100px);
+.showImg {
+  background-size: cover;
+  filter: blur(100px);
   height: 100%;
 }
 .bg {
   height: 900px;
- 
+
   position: relative;
 }
 .con {
+  z-index: 100;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -241,13 +288,24 @@ export default {
   font-size: 54px;
   color: #fff;
   div {
-    width: 265px;
+    width: max-content;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .inp {
+      width: 500px;
+      background: transparent;
+      outline: none;
+      border: none;
+      font-size: 40px;
+      font-weight: normal;
+      padding: 5px 10px;
+      border-bottom: 1px solid #fff;
+    }
   }
   i {
     font-size: 54px;
+    margin: 0 20px;
   }
 }
 .info {
@@ -265,9 +323,8 @@ export default {
     margin-right: 20px;
   }
   .py {
-    
     display: flex;
-    
+
     flex-direction: column;
     justify-content: space-between;
 
@@ -379,14 +436,12 @@ export default {
         height: 65px;
       }
     }
-    .playActive{
-      div{
+    .playActive {
+      div {
         .name {
-color: maroon !important;
+          color: maroon !important;
         }
- 
       }
-     
     }
   }
 }

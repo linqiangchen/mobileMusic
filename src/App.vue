@@ -54,7 +54,7 @@ export default {
       musicUrl: (state) => state.music.musicUrl,
       musicImg: (state) => state.music.musicImg,
       musicName: (state) => state.music.musicName,
-      musicSonger: (state) => state.music.musicSonger,
+      musicSonger: (state) =>state.music.musicSonger && state.music.musicSonger.map(item => item.name).join('/'),
       musicDt: (state) => state.music.musicDt,
       isplay: (state) => state.music.isPlay,
       like: (state) => state.user.like,
@@ -105,7 +105,7 @@ export default {
         },
         {
           id: 1,
-          path: "/singer",
+          path: "/",
           title: "发现",
         },
         {
@@ -113,10 +113,11 @@ export default {
           path: "/playListPlaza",
           title: "歌单",
         },
+       
         {
-          id: 3,
-          path: "/topList",
-          title: "排行",
+          id: 4,
+          path: "/mv",
+          title: "MV",
         },
       ],
     };
@@ -194,12 +195,12 @@ export default {
 </script>
 
 <style lang="scss">
-@import url("//at.alicdn.com/t/font_2053859_strl3m7ovyi.css");
+@import url("//at.alicdn.com/t/font_2053859_gw0y6t7fc09.css");
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+
 }
 
 @keyframes music {
