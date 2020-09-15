@@ -11,7 +11,11 @@ export default {
         singer:[],
         singerInfo:[],
         singerMusic:null,
+        loadSinger:false,
+        loadSingerMusic:false,
+        loadPlayList:false,
     },
+    
     mutations: {
         updatePlayList(state, obj) {
             state.playlist = obj
@@ -31,11 +35,20 @@ export default {
         updateSingerMusic(state, obj) {
             state.singerMusic = obj.SingerMusic
             state.singerInfo = obj.singer
+        },
+        updateLoading(state, obj){
+            state.loadSinger = obj
+        },
+        updateLoadPlayList(state, obj){
+            state.loadPlayList = obj
+        },
+        updateLoadSingerMusic(state, bool){
+            state.loadSingerMusic = bool
         }
     },
     actions: {
         loadPlayList(context,cat="") { //加载用户歌单
-        
+            context.commit('updateLoadPlayList',true)
                let url = context.state.api + '/top/playlist' +cat
             
             axios.get(url).then(res => {
@@ -53,7 +66,8 @@ export default {
                     }
                 }))
 
-                context.commit('updatePlayList', playlist)
+                context.commit('updatePlayList', playlist);
+                context.commit('updateLoadPlayList',false)
             })
         },
         loadBanner(context) { //加载用户歌单
@@ -75,17 +89,21 @@ export default {
                 context.commit('updateCatList', catList)
             })
         },
-        loadSinger(context){
-            axios.get(context.state.api + '/top/artists?offset=0&limit=50').then(res => {
+        loadSinger(context,path){
+            context.commit('updateLoading',true)
+           path = path + '&limit=50'
+            axios.get(context.state.api + path).then(res => {
                 const Singer = res.data.artists.map((item) => ({
                     name:item.name,
                     picUrl:item.picUrl,
                     id:+item.id 
                 }))
                 context.commit('updateSinger', Singer)
+                context.commit('updateLoading',false)
             })
         },
         loadSingerMusic(context,id){
+            context.commit('updateLoadSingerMusic',true)
             axios.get(context.state.api + '/artists?id=' + id).then(res => {
                 const singer = {
                     picUrl:res.data.artist.picUrl,
@@ -100,7 +118,8 @@ export default {
                         album:item.al.name,
                         songsCount:50
                 }))
-                context.commit('updateSingerMusic', {singer,SingerMusic})
+                context.commit('updateSingerMusic', {singer,SingerMusic});
+                context.commit('updateLoadSingerMusic',false)
             })
         },
         loadTopList(context){

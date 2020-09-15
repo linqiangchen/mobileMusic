@@ -23,7 +23,12 @@
       <div>
         <div class="swiper-container" ref="swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="item in topPlaylist" :key="item.coverImgUrl" @click="loadPlayList(item.id)">
+            <div
+              class="swiper-slide"
+              v-for="item in topPlaylist"
+              :key="item.coverImgUrl"
+              @click="loadPlayList(item.id)"
+            >
               <img :src="item.coverImgUrl" alt />
               <p>{{item.name}}</p>
               <div class="coun">
@@ -38,7 +43,7 @@
         </div>
 
         <ul class="list">
-          <li class="" v-for="item in nextPlaylist" :key="item.id" @click="loadPlayList(item.id)">
+          <li class v-for="item in nextPlaylist" :key="item.id" @click="loadPlayList(item.id)">
             <img v-lazy="item.coverImgUrl" alt />
             <p>{{item.name}}</p>
             <div class="coun">
@@ -99,11 +104,11 @@ export default {
     };
   },
   mounted() {
-     this.$nextTick(() => {
-          if(this.swiper){
-              this.swiper.update()
-          }else{
-              this.swiper =  new Swiper(this.$refs.swiper, {
+    this.$nextTick(() => {
+      if (this.swiper) {
+        this.swiper.update();
+      } else {
+        this.swiper = new Swiper(this.$refs.swiper, {
           effect: "coverflow",
           grabCursor: true,
           centeredSlides: true,
@@ -115,38 +120,42 @@ export default {
             modifier: 1,
             slideShadows: true,
           },
-
         });
-       
-          }
-        this.swiper.slideTo(1)
-        this.$refs.iscroll.scrollTo(0,0,300);
-      });
+      }
+      this.swiper.slideTo(1);
+      this.$refs.iscroll.scrollTo(0, 0, 300);
+    });
   },
   watch: {
+     loading(newVal) {
+      if (newVal) {
+        this.$showLoading(); 
+      } else {
+        this.$hideLoading();
+      }
+    },
     playlist(newVal) {
+      
       this.$nextTick(() => {
-          if(this.swiper){
-              this.swiper.update()
-          }else{
-              this.swiper =  new Swiper(this.$refs.swiper, {
-          effect: "coverflow",
-          grabCursor: true,
-          centeredSlides: true,
-          slidesPerView: "auto",
-          coverflowEffect: {
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: true,
-          },
-
-        });
-       
-          }
-        this.swiper.slideTo(1)
-         this.$refs.iscroll.scrollTo(0,0,300);
+        if (this.swiper) {
+          this.swiper.update();
+        } else {
+          this.swiper = new Swiper(this.$refs.swiper, {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            coverflowEffect: {
+              rotate: 50,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows: true,
+            },
+          });
+        }
+        this.swiper.slideTo(1);
+        this.$refs.iscroll.scrollTo(0, 0, 300);
       });
     },
   },
@@ -163,34 +172,36 @@ export default {
       playlist: (state) => state.recommend.playlist,
       trackIds: (state) => state.playList.trackIds,
       playCount: (state) => state.recommend.playCount,
+      loading: (state) => state.recommend.loadPlayList,
     }),
     topPlaylist() {
       return this.playlist.slice(0, 8);
     },
     nextPlaylist() {
-      return this.playlist.slice( 8);
+      return this.playlist.slice(8);
     },
   },
+
   methods: {
     log(e) {
       e.refresh();
     },
-      loadPlayList(id){
-      this.$router.push('/playList')
-      this.$store.dispatch('playList/loadPlayList',id)
+    loadPlayList(id) {
+      this.$router.push("/playList");
+      this.$store.dispatch("playList/loadPlayList", id);
     },
-    change(num){
-      if(num>10000 && num<100000000){
-            return parseInt(num/10000) + '万'
-        }else if(num>=100000000){
-            return parseInt(num/100000000) + '亿'
-        }else{
-          return num
-        }
+    change(num) {
+      if (num > 10000 && num < 100000000) {
+        return parseInt(num / 10000) + "万";
+      } else if (num >= 100000000) {
+        return parseInt(num / 100000000) + "亿";
+      } else {
+        return num;
+      }
     },
     toggle(index) {
       this.active = index;
-      this.$store.dispatch("recommend/loadPlayList",this.navlist[index].path);
+      this.$store.dispatch("recommend/loadPlayList", this.navlist[index].path);
     },
   },
 };
@@ -235,8 +246,8 @@ export default {
     li {
       height: 120px;
       line-height: 120px;
-      i{
-          font-size: 40px;
+      i {
+        font-size: 40px;
       }
     }
     .active {
@@ -255,52 +266,52 @@ export default {
   }
 }
 .list {
-    // margin-top: 40px;
+  // margin-top: 40px;
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   margin: 0 auto;
   li {
-      margin: 40px 0;
+    margin: 40px 0;
     width: 33.3%;
     position: relative;
-   padding: 0 20px;
-    
+    padding: 0 20px;
+
     overflow: hidden;
-  
-    img{
-        width: 310px;
-        border-radius: 20px;
+
+    img {
+      width: 310px;
+      border-radius: 20px;
     }
-     p {
-    text-align: left;
-    font-size: 35px;
-    color: #333;
-    line-height: 45px;
-    padding: 10px;
-  }
-  .coun {
-    position: absolute;
-     padding: 0 10px;
-    padding-right: 20px;
-    height: 70px;
-    line-height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 80%;
-    top: 0px;
-    right: 30px;
-    color: #fff;
-     border-radius: 20px;
-    background: linear-gradient(
-      rgba(110, 110, 110, 0.4),
-      rgba(255, 255, 255, 0)
-    );
-    i {
-      margin-right: 10px;
+    p {
+      text-align: left;
+      font-size: 35px;
+      color: #333;
+      line-height: 45px;
+      padding: 10px;
     }
-  }
+    .coun {
+      position: absolute;
+      padding: 0 10px;
+      padding-right: 20px;
+      height: 70px;
+      line-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 80%;
+      top: 0px;
+      right: 30px;
+      color: #fff;
+      border-radius: 20px;
+      background: linear-gradient(
+        rgba(110, 110, 110, 0.4),
+        rgba(255, 255, 255, 0)
+      );
+      i {
+        margin-right: 10px;
+      }
+    }
   }
 }
 </style>

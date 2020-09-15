@@ -132,8 +132,8 @@ export default {
     loading(newVal){
       if(newVal){
         this.$showLoading()
-        this.$refs.iscroll.scrollTo(0,0,0)
-        console.log('this.$refs.iscroll: ', this.$refs.iscroll);
+
+        
       }else{
         this.$hideLoading()
       }

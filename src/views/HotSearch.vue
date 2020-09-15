@@ -58,7 +58,7 @@ export default {
         
      },
      autoplay(){
-         console.log(this.$parent);
+         
      }
  },
  mounted(){

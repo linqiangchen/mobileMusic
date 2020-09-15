@@ -4,7 +4,7 @@
       <img :src="singerInfo.picUrl" alt />
       <div class="header">
         <div class="left">
-          <i class="iconfont icon-zuo" @click="$router.back()"></i>
+          <i class="iconfont icon-zuo" @click="$router.push('/singer')"></i>
           <span>歌手</span>
         </div>
         <div class="right">
@@ -40,7 +40,7 @@
         <i class="iconfont icon-jiarushoucang"></i>
       </div>
     </div>
-    <iscroll-view class="pl-content" @scrollStart="log">
+    <iscroll-view class="pl-content" @scrollStart="log" ref="iscroll">
       <div>
         <ul>
           <li
@@ -88,10 +88,22 @@ export default {
     ...mapState({
       singerMusic: (state) => state.recommend.singerMusic,
       singerInfo: (state) => state.recommend.singerInfo,
+      loadSingerMusic:(state) => state.recommend.loadSingerMusic,
     }),
   },
   created() {
     // this.$store.dispatch("recommend/loadSingerMusic", 5781);
+  },
+  watch:{
+    loadSingerMusic(newVal){
+      if(newVal){
+        this.$showLoading()
+  this.$refs.iscroll.scrollTo(0,0,0)
+        
+      }else{
+        this.$hideLoading()
+      }
+    }
   },
   methods: {
     toggleDate(time) {

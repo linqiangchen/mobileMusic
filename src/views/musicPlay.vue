@@ -226,7 +226,7 @@ beforeRouteLeave (to, from, next) {
       this.iScroll = this.$refs.iscroll.iscroll;
     
         this.width = this.$refs.line.offsetWidth;
-      console.log('this.width: ', this.width);
+      
       
     });
   },
@@ -263,7 +263,7 @@ beforeRouteLeave (to, from, next) {
         return;
       }
       let x = (e.clientX - this.$refs.line.offsetLeft) / this.width;
-        console.log('(x * this.musicDt) / 1000: ',  this.width );
+        
       this.$parent.$refs.music.currentTime = (x * this.musicDt) / 1000;
     
       // this.$store.commit('music/updatePt' ,x*this.musicDt/1000 )
@@ -342,6 +342,7 @@ beforeRouteLeave (to, from, next) {
    background-size: cover;
     filter: blur(90px);
   height: 100%;
+  overflow: hidden;
 }
 .con{
   color: #fff;

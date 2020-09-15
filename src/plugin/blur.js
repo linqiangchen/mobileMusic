@@ -7,9 +7,7 @@ export default {
         blur: 80,
         maskColor: 'rgba(0,0,0,.2)'
     }) {
-      
         //自定义背景虚化指令
-    
         Vue.directive('imgBlur', (...rest) => {
             const key = rest[0].getAttribute('b-key') || ''
             let divImg 
@@ -20,10 +18,8 @@ export default {
                 keyList.push(key)         
             } else{
                  divImg = document.querySelector(`._mybg${key}`) 
-             
                  divMask = document.querySelector(`._my_mask${key}`) 
-            } 
-            console.log(key)
+            }    
             rest[0].classList.add('blur')
             divMask.classList.add(`my_mask` ,`_my_mask${key}`)
             divImg.classList.add(`__bg`  ,`_mybg${key}`)
